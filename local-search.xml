@@ -4,11 +4,24 @@
   
   
   <entry>
-    <title>测试下下</title>
-    <link href="/2022/02/15/yuque/%E6%B5%8B%E8%AF%95%E4%B8%8B%E4%B8%8B/"/>
-    <url>/2022/02/15/yuque/%E6%B5%8B%E8%AF%95%E4%B8%8B%E4%B8%8B/</url>
+    <title>快手web解密</title>
+    <link href="/2022/02/16/yuque/%E5%BF%AB%E6%89%8Bweb%E8%A7%A3%E5%AF%86/"/>
+    <url>/2022/02/16/yuque/%E5%BF%AB%E6%89%8Bweb%E8%A7%A3%E5%AF%86/</url>
     
-    <content type="html"><![CDATA[<p>测试下下下</p>]]></content>
+    <content type="html"><![CDATA[<p></p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><code class="hljs java"># 映射表 网页字符：明文<br><span class="hljs-keyword">import</span> re<br>from io <span class="hljs-keyword">import</span> BytesIO<br><br><span class="hljs-keyword">import</span> requests<br><br>from fontTools.ttLib <span class="hljs-keyword">import</span> <span class="hljs-type">TTFont</span><br><br><span class="hljs-variable">fontCdnUrl</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;https://tx2.a.kwimgs.com/kos/nlav10312/mdata/pkg/kwai-font/fontscn_28937141.ttf&quot;</span><br>key_map = &#123;&#125;<br># 动态获取字体<br>font_content = requests.get(fontCdnUrl).<span class="hljs-type">content</span><br><span class="hljs-variable">font</span> <span class="hljs-operator">=</span> TTFont(BytesIO(font_content))  # 从内存加载<br>code = font.getGlyphOrder()[<span class="hljs-number">1</span>:]  # 固定顺序的字符编码列表（去除第一个无效字符）<br>nums = [  # 固定顺序明文列表<br>    <span class="hljs-string">&#x27;0&#x27;</span>, <span class="hljs-string">&#x27;1&#x27;</span>, <span class="hljs-string">&#x27;2&#x27;</span>, <span class="hljs-string">&#x27;3&#x27;</span>, <span class="hljs-string">&#x27;4&#x27;</span>, <span class="hljs-string">&#x27;5&#x27;</span>, <span class="hljs-string">&#x27;6&#x27;</span>, <span class="hljs-string">&#x27;7&#x27;</span>, <span class="hljs-string">&#x27;8&#x27;</span>, <span class="hljs-string">&#x27;9&#x27;</span>, <span class="hljs-string">&#x27;.&#x27;</span>, <span class="hljs-string">&#x27;w&#x27;</span>, <span class="hljs-string">&#x27;k&#x27;</span>,<br>    <span class="hljs-string">&#x27;m&#x27;</span>, <span class="hljs-string">&#x27;+&#x27;</span><br>]<br>temp = dict(zip(code, nums))  # 临时映射（固定顺序），字符编码uni****：明文<br>res = font.getBestCmap()  # 获取关键映射，网页字符转码：字符编码uni****<br><span class="hljs-keyword">for</span> k, v in res.items():<br>    # 网页字符去除前缀，再从<span class="hljs-number">16</span>进制转<span class="hljs-number">10</span>进制，就得到k，这里逆向写，即k转<span class="hljs-number">16</span>进制后拼接前缀<br>    kk = <span class="hljs-string">&#x27;&amp;#&#x27;</span> + str(hex(k))[<span class="hljs-number">1</span>:]<br>    # 从临时映射中根据字符编码uni****取出明文<br>    key_map[kk] = temp[v]<br># print(len(key_map), key_map)<br>re_html_code = re.compile(r<span class="hljs-string">&#x27;&amp;#x[\da-f]&#123;4&#125;&#x27;</span>)<br># <span class="hljs-keyword">for</span> word in [<span class="hljs-string">&#x27;fan&#x27;</span>, <span class="hljs-string">&#x27;follow&#x27;</span>, <span class="hljs-string">&#x27;photo&#x27;</span>, <span class="hljs-string">&#x27;collect&#x27;</span>]:  # 遍历需要用到的字体加密的参数<br>text = <span class="hljs-string">&quot;&quot;</span><br>words = re_html_code.findall(text)<br>result = <span class="hljs-string">&#x27;&#x27;</span>.join(key_map[i] <span class="hljs-keyword">for</span> i in words)<br><br>print(result)<br></code></pre></td></tr></table></figure><p>参考：吾爱破解的文章</p>]]></content>
+    
+    
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>应该可以了吧</title>
+    <link href="/2022/02/15/yuque/%E5%BA%94%E8%AF%A5%E5%8F%AF%E4%BB%A5%E4%BA%86%E5%90%A7/"/>
+    <url>/2022/02/15/yuque/%E5%BA%94%E8%AF%A5%E5%8F%AF%E4%BB%A5%E4%BA%86%E5%90%A7/</url>
+    
+    <content type="html"><![CDATA[<p>— title: java之如何使当前程序使用代理<br>description:<br>tags:[java, 代理]categories: java参考链接java中设置网络代理——简书@jijs java之如何使当前程序使用代理概述java中支持的代理java中支持 HTTP代理、HTTPS代理、Socket代理、FTP代理 。&lt;!–more–&gt;程序中编写程序…<br>date: 2019-05-05 12:13:10 +0800<br>tags: [] </p><hr>]]></content>
     
     
     

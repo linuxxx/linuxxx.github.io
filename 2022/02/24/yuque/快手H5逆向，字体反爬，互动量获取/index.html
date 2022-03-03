@@ -32,7 +32,7 @@
 <meta property="og:image" content="https://cdn.nlark.com/yuque/0/2022/png/2744235/1646013696797-60dba5bf-7be5-4047-9ddf-aaf9f8db14e0.png#clientId=u211035ad-afac-4&from=paste&height=225&id=u0b24eb20&margin=%5Bobject%20Object%5D&name=image.png&originHeight=450&originWidth=1683&originalType=binary%E2%88%B6=1&size=61090&status=done&style=none&taskId=uf9f87274-a55c-4ed7-8436-1ad6a917c2b&width=841.5">
 <meta property="og:image" content="https://cdn.nlark.com/yuque/0/2022/png/2744235/1646018712079-63fb9897-24a8-4b7a-b11b-0a3e99afd54d.png#clientId=u211035ad-afac-4&from=paste&height=227&id=u4e9703cd&margin=%5Bobject%20Object%5D&name=image.png&originHeight=453&originWidth=1648&originalType=binary%E2%88%B6=1&size=61563&status=done&style=none&taskId=u7f99611a-6f09-47d5-9d9c-5338d281dd4&width=824">
 <meta property="article:published_time" content="2022-02-24T07:06:37.000Z">
-<meta property="article:modified_time" content="2022-03-03T02:36:57.163Z">
+<meta property="article:modified_time" content="2022-03-03T02:40:57.048Z">
 <meta property="article:author" content="ive_e （leoli）">
 <meta property="article:tag" content="frida unidbg 快手 抖音 淘宝 爬虫">
 <meta name="twitter:card" content="summary_large_image">
@@ -232,7 +232,7 @@
         
         
           <!-- compatible with older versions-->
-          114 分钟
+          115 分钟
         
       </span>
     
@@ -283,7 +283,8 @@
 <h2 id="页面中显示："><a href="#页面中显示：" class="headerlink" title="页面中显示："></a>页面中显示：</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java">&lt;p class=<span class="hljs-string">&quot;video-like&quot;</span>&gt;  &lt;span style=<span class="hljs-string">&quot;FONT-FAMILY: kwaiFont;&quot;</span>&gt;&lt;/span&gt;  &lt;/p&gt;<br></code></pre></td></tr></table></figure>
 
 <p>可以明显看出是有<strong>字体反爬</strong>处理，需要下载字体文件进行解密<br>​</p>
-<h1 id="什么是字体反爬？"><a href="#什么是字体反爬？" class="headerlink" title="什么是字体反爬？"></a>什么是字体反爬？</h1><p>使用自定义的 ttf 文件来渲染网页中的文字，而网页中的文字不再是文字，而是相应的字体编码，通过复制或者简单的采集是无法采集到编码后的文字内容<br>​</p>
+<h1 id="什么是字体反爬？"><a href="#什么是字体反爬？" class="headerlink" title="什么是字体反爬？"></a>什么是字体反爬？</h1><p>使用自定义的 ttf 文件来渲染网页中的文字，而网页中的文字不再是文字，而是相应的字体编码，通过复制或者简单的采集是无法采集到编码后的文字内容</p>
+<h2 id="字体反爬实现原理"><a href="#字体反爬实现原理" class="headerlink" title="字体反爬实现原理"></a>字体反爬实现原理</h2><p>厂商会随机生成成千上万套字库，并且保存好编码、字库文件、字的映射关系。文章显示的时候会从库中随机查询一套字库，并把文章中的替换成 unicode 编码，以达到字体加密的效果。<br>​</p>
 <h1 id="字体反爬的前世今生"><a href="#字体反爬的前世今生" class="headerlink" title="字体反爬的前世今生"></a>字体反爬的前世今生</h1><h2 id="初级难度：一套字体做加密"><a href="#初级难度：一套字体做加密" class="headerlink" title="初级难度：一套字体做加密"></a>初级难度：一套字体做加密</h2><p>做好映射解密即可</p>
 <h2 id="中级难度：生成多套字体和编码"><a href="#中级难度：生成多套字体和编码" class="headerlink" title="中级难度：生成多套字体和编码"></a>中级难度：生成多套字体和编码</h2><p>比如:<strong>猫眼电影,58 同城等等，汽车之家</strong><br>虽然生成了多套，但是每个字对应的字体信息是不变<br>比如一个字的笔画数，和 x,y 变化都很小，可以利用这个特征解析字体的 xml 文件，做特征映射</p>
 <h2 id="高级难度：字体变形，字体信息随机化"><a href="#高级难度：字体变形，字体信息随机化" class="headerlink" title="高级难度：字体变形，字体信息随机化"></a>高级难度：字体变形，字体信息随机化</h2><p>比如：<strong>快手</strong><br><strong>​</strong></p>

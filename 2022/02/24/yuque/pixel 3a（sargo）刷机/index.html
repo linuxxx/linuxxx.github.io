@@ -25,7 +25,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://cdn.nlark.com/yuque/0/2022/png/2744235/1645668514390-78640d53-cba7-43a9-b36b-d6e45fc790c9.png#clientId=u255e42db-bb00-4&from=paste&height=361&id=ud13a490e&margin=%5Bobject%20Object%5D&name=image.png&originHeight=721&originWidth=830&originalType=binary%E2%88%B6=1&size=112655&status=done&style=none&taskId=u7cbf71eb-5417-422e-945d-b61c355f65f&width=415">
 <meta property="article:published_time" content="2022-02-24T02:07:40.000Z">
-<meta property="article:modified_time" content="2022-03-03T02:55:33.968Z">
+<meta property="article:modified_time" content="2022-03-08T06:50:57.703Z">
 <meta property="article:author" content="ive_e （leoli）">
 <meta property="article:tag" content="frida unidbg 快手 抖音 淘宝 爬虫">
 <meta name="twitter:card" content="summary_large_image">
@@ -213,7 +213,7 @@
         <i class="iconfont icon-chart"></i>
         
           <!-- compatible with older versions-->
-          692 字
+          689 字
         
       </span>
     
@@ -272,11 +272,11 @@
 
 <h1 id="adb-push-zip-到-x2F-sdcard"><a href="#adb-push-zip-到-x2F-sdcard" class="headerlink" title="adb push zip 到&#x2F;sdcard"></a>adb push zip 到&#x2F;sdcard</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs java">PS E:\rom\twrp&gt; adb push .\twrp-installer-<span class="hljs-number">3.3</span><span class="hljs-number">.1</span>-<span class="hljs-number">1</span>-sargo.zip /sdcard<br>.\twrp-installer-<span class="hljs-number">3.3</span><span class="hljs-number">.1</span>-<span class="hljs-number">1</span>-sargo.zip: <span class="hljs-number">1</span> file pushed, <span class="hljs-number">0</span> skipped. <span class="hljs-number">69.3</span> MB/s (<span class="hljs-number">10103558</span> bytes in <span class="hljs-number">0.</span>139s)<br>PS E:\rom\twrp&gt;<br></code></pre></td></tr></table></figure>
 
-<h1 id="在-twrp-中-install-选择-zip-包进行安装"><a href="#在-twrp-中-install-选择-zip-包进行安装" class="headerlink" title="在 twrp 中 install 选择 zip 包进行安装"></a>在 twrp 中 install 选择 zip 包进行安装</h1><p>reboot system， 选择 do not install ok 完成~ twrp 的输入<br>​</p>
-<h1 id="安装面具"><a href="#安装面具" class="headerlink" title="安装面具"></a>安装面具</h1><p>安装 magisk.apk . 选择修补一个文件，选择 rom 解压出来的 boot.img<br>修补后会在 boot.img 的同文件夹下生成一个 magisk_patched.img 文件，传回电脑<br>​</p>
+<h1 id="在-twrp-中-install-选择-zip-包进行安装"><a href="#在-twrp-中-install-选择-zip-包进行安装" class="headerlink" title="在 twrp 中 install 选择 zip 包进行安装"></a>在 twrp 中 install 选择 zip 包进行安装</h1><p>reboot system， 选择 do not install ok 完成~ twrp 的输入</p>
+<h1 id="安装面具"><a href="#安装面具" class="headerlink" title="安装面具"></a>安装面具</h1><p>安装 magisk.apk . 选择修补一个文件，选择 rom 解压出来的 boot.img<br>修补后会在 boot.img 的同文件夹下生成一个 magisk_patched.img 文件，传回电脑</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs java">adb reboot bootloader<br>fastboot flash boot magisk_patched-23000_PUUwu.img<br>fastboot reboot<br></code></pre></td></tr></table></figure>
 
-<p>安装 magisk<br>完成~<br>​</p>
+<p>安装 magisk<br>完成~</p>
 
               
             </div>

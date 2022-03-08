@@ -24,7 +24,7 @@
 <meta property="og:description" content="元素定位 query_selector(engine&#x3D;body) # 选择单个元素 query_selectorAll(engine&#x3D;body) # 选择多个元素 wait_for_selector(engine&#x3D;body) # 选择单个元素，并且自动等待到元素可见、可操作  123456789101112131415161718191. 以 &#x2F;&#x2F; 或 &#x2F; 或者 ..">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2022-02-15T04:18:18.000Z">
-<meta property="article:modified_time" content="2022-03-03T02:55:33.968Z">
+<meta property="article:modified_time" content="2022-03-08T06:50:57.703Z">
 <meta property="article:author" content="ive_e （leoli）">
 <meta property="article:tag" content="frida unidbg 快手 抖音 淘宝 爬虫">
 <meta name="twitter:card" content="summary_large_image">
@@ -274,13 +274,12 @@
 
 <h1 id="打印元素-html，方便定位测试"><a href="#打印元素-html，方便定位测试" class="headerlink" title="打印元素 html，方便定位测试"></a>打印元素 html，方便定位测试</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs java"><br>element_handle.inner_html()<br>returns: &lt;str&gt;#<br>Returns the element.innerHTML.<br>element_handle.inner_text()<br></code></pre></td></tr></table></figure>
 
-<p>​</p>
-<p>参考：<a target="_blank" rel="noopener" href="http://blog.itpub.net/69942496/viewspace-2765795/">http://blog.itpub.net/69942496/viewspace-2765795/</a><br>​</p>
+<p>参考：<a target="_blank" rel="noopener" href="http://blog.itpub.net/69942496/viewspace-2765795/">http://blog.itpub.net/69942496/viewspace-2765795/</a></p>
 <h1 id="如何使用-mobile-仿真模式，支持-touch-事件"><a href="#如何使用-mobile-仿真模式，支持-touch-事件" class="headerlink" title="如何使用 mobile 仿真模式，支持 touch 事件"></a>如何使用 mobile 仿真模式，支持 touch 事件</h1><h3 id="puppeteer"><a href="#puppeteer" class="headerlink" title="puppeteer"></a><a target="_blank" rel="noopener" href="https://github.com/puppeteer/puppeteer">puppeteer</a></h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">const</span> <span class="hljs-variable">devtoolsProtocolClient</span> <span class="hljs-operator">=</span> await page.target().createCDPSession();<br>await devtoolsProtocolClient.send(<span class="hljs-string">&quot;Emulation.setEmitTouchEventsForMouse&quot;</span>, &#123; enabled: <span class="hljs-literal">true</span> &#125;);<br></code></pre></td></tr></table></figure>
 
 <h3 id="playwright"><a href="#playwright" class="headerlink" title="playwright"></a>playwright</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs java">client = page.context.new_cdp_session(page)<br>client.send(<span class="hljs-string">&quot;Emulation.setEmitTouchEventsForMouse&quot;</span>,&#123;<span class="hljs-string">&quot;enabled&quot;</span>:True&#125;)<br></code></pre></td></tr></table></figure>
 
-<p>参考：<a target="_blank" rel="noopener" href="https://github.com/puppeteer/puppeteer/issues/1079">https://github.com/puppeteer/puppeteer/issues/1079</a><br>​</p>
+<p>参考：<a target="_blank" rel="noopener" href="https://github.com/puppeteer/puppeteer/issues/1079">https://github.com/puppeteer/puppeteer/issues/1079</a></p>
 <h1 id="执行-js"><a href="#执行-js" class="headerlink" title="执行 js"></a>执行 js</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs java">page.evaluate(<span class="hljs-string">&quot;success()&quot;</span>)<br>page.evaluate(<span class="hljs-string">&#x27;document.querySelectorAll(&quot;.add&quot;)[&#x27;</span> + str(i) + <span class="hljs-string">&#x27;].click()&#x27;</span>)<br></code></pre></td></tr></table></figure>
 
               

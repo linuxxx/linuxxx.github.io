@@ -1,0 +1,742 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="ive_e （leoli）">
+  <meta name="keywords" content="frida unidbg 快手 抖音 淘宝 爬虫">
+  
+    <meta name="description" content="目标获取快手视频点赞数、评论数、 播放数 分析视频接口https:&#x2F;&#x2F;m.gifshow.com&#x2F;fw&#x2F;photo&#x2F;5232901352181146092 请求头：12345678910111213sec-ch-ua: &quot; Not A;Brand&quot;;v&#x3D;&quot;99&quot;, &quot;Chromium&quot;;v&#x3D;&quot;98&quot;, &quot;Go">
+<meta property="og:type" content="article">
+<meta property="og:title" content="快手H5逆向，字体反爬，互动量获取">
+<meta property="og:url" content="http://blog.uzilol.cn/2022/02/24/yuque/%E5%BF%AB%E6%89%8BH5%E9%80%86%E5%90%91%EF%BC%8C%E5%AD%97%E4%BD%93%E5%8F%8D%E7%88%AC%EF%BC%8C%E4%BA%92%E5%8A%A8%E9%87%8F%E8%8E%B7%E5%8F%96/index.html">
+<meta property="og:site_name" content="逆向的尾巴">
+<meta property="og:description" content="目标获取快手视频点赞数、评论数、 播放数 分析视频接口https:&#x2F;&#x2F;m.gifshow.com&#x2F;fw&#x2F;photo&#x2F;5232901352181146092 请求头：12345678910111213sec-ch-ua: &quot; Not A;Brand&quot;;v&#x3D;&quot;99&quot;, &quot;Chromium&quot;;v&#x3D;&quot;98&quot;, &quot;Go">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2022/png/2744235/1645671500955-8ecb9aac-707a-4320-8047-8fce0a3be2e8.png#clientId=u1652befd-1cd7-4&from=paste&height=330&id=iwoiU&margin=%5Bobject%20Object%5D&name=image.png&originHeight=660&originWidth=450&originalType=binary%E2%88%B6=1&size=516468&status=done&style=none&taskId=u9f116621-325f-4c81-a319-244c6d6163a&width=225">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2022/png/2744235/1645674670513-87b8df4f-6ce8-452c-8080-d5fc3ecc798e.png#clientId=u1652befd-1cd7-4&from=paste&height=170&id=fvt5s&margin=%5Bobject%20Object%5D&name=image.png&originHeight=339&originWidth=1195&originalType=binary%E2%88%B6=1&size=37020&status=done&style=none&taskId=uee898422-626d-4619-b80c-f75f149de1a&width=597.5">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2022/png/2744235/1645689003491-85cab0c6-f6f1-472d-92ef-7917f46b22ff.png#clientId=u10da156e-2811-4&from=paste&height=337&id=u92a0e3d9&margin=%5Bobject%20Object%5D&name=image.png&originHeight=673&originWidth=1315&originalType=binary%E2%88%B6=1&size=68780&status=done&style=none&taskId=u86848edb-5263-47ec-957a-89923f7d2bc&width=657.5">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2022/png/2744235/1645756969520-f17d77e1-fdc6-4c49-aba8-2f2e1efc0471.png#clientId=u0fb3019f-4b33-4&from=paste&height=307&id=u6db364a4&margin=%5Bobject%20Object%5D&name=image.png&originHeight=614&originWidth=495&originalType=binary%E2%88%B6=1&size=37969&status=done&style=none&taskId=u43618a62-3c05-45f4-a6d8-d73ae9c5c5d&width=247.5">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2022/png/2744235/1645757027875-439caa89-4b83-490e-9af8-3ccef99e63f7.png#clientId=u0fb3019f-4b33-4&from=paste&height=307&id=u81403d77&margin=%5Bobject%20Object%5D&name=image.png&originHeight=613&originWidth=407&originalType=binary%E2%88%B6=1&size=32740&status=done&style=none&taskId=u570b17d7-45ca-4ff5-8d87-8abd6b7fb71&width=203.5">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2022/png/2744235/1645773077034-664067aa-d97f-4459-be6d-ae1696d7b079.png#clientId=u1c35ade9-6362-4&from=paste&height=52&id=u0291bcea&margin=%5Bobject%20Object%5D&name=image.png&originHeight=104&originWidth=798&originalType=binary%E2%88%B6=1&size=9949&status=done&style=none&taskId=u5f27e365-4b12-4cef-9151-1064868478c&width=399">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2022/png/2744235/1646013696797-60dba5bf-7be5-4047-9ddf-aaf9f8db14e0.png#clientId=u211035ad-afac-4&from=paste&height=225&id=u0b24eb20&margin=%5Bobject%20Object%5D&name=image.png&originHeight=450&originWidth=1683&originalType=binary%E2%88%B6=1&size=61090&status=done&style=none&taskId=uf9f87274-a55c-4ed7-8436-1ad6a917c2b&width=841.5">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2022/png/2744235/1646018712079-63fb9897-24a8-4b7a-b11b-0a3e99afd54d.png#clientId=u211035ad-afac-4&from=paste&height=227&id=u4e9703cd&margin=%5Bobject%20Object%5D&name=image.png&originHeight=453&originWidth=1648&originalType=binary%E2%88%B6=1&size=61563&status=done&style=none&taskId=u7f99611a-6f09-47d5-9d9c-5338d281dd4&width=824">
+<meta property="article:published_time" content="2022-02-24T07:06:37.000Z">
+<meta property="article:modified_time" content="2022-03-03T02:55:33.968Z">
+<meta property="article:author" content="ive_e （leoli）">
+<meta property="article:tag" content="frida unidbg 快手 抖音 淘宝 爬虫">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2022/png/2744235/1645671500955-8ecb9aac-707a-4320-8047-8fce0a3be2e8.png#clientId=u1652befd-1cd7-4&from=paste&height=330&id=iwoiU&margin=%5Bobject%20Object%5D&name=image.png&originHeight=660&originWidth=450&originalType=binary%E2%88%B6=1&size=516468&status=done&style=none&taskId=u9f116621-325f-4c81-a319-244c6d6163a&width=225">
+  
+  
+  <title>快手H5逆向，字体反爬，互动量获取 - 逆向的尾巴</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"blog.uzilol.cn","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+
+  
+<meta name="generator" content="Hexo 6.0.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>逆向的尾巴</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          <span id="subtitle" title="快手H5逆向，字体反爬，互动量获取">
+            
+          </span>
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-02-24 15:06" pubdate>
+          2022年2月24日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          <!-- compatible with older versions-->
+          14k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          <!-- compatible with older versions-->
+          115 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+<meta name="referrer" content="no-referrer" />
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">快手H5逆向，字体反爬，互动量获取</h1>
+            
+            <div class="markdown-body">
+              
+              <h1 id="目标"><a href="#目标" class="headerlink" title="目标"></a>目标</h1><p>获取快手视频点赞数、评论数、 播放数</p>
+<h1 id="分析视频接口"><a href="#分析视频接口" class="headerlink" title="分析视频接口"></a>分析视频接口</h1><p><a target="_blank" rel="noopener" href="https://m.gifshow.com/fw/photo/5232901352181146092">https://m.gifshow.com/fw/photo/5232901352181146092</a><br><img src="https://cdn.nlark.com/yuque/0/2022/png/2744235/1645671500955-8ecb9aac-707a-4320-8047-8fce0a3be2e8.png#clientId=u1652befd-1cd7-4&from=paste&height=330&id=iwoiU&margin=%5Bobject%20Object%5D&name=image.png&originHeight=660&originWidth=450&originalType=binary%E2%88%B6=1&size=516468&status=done&style=none&taskId=u9f116621-325f-4c81-a319-244c6d6163a&width=225" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<h2 id="请求头："><a href="#请求头：" class="headerlink" title="请求头："></a>请求头：</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs java">sec-ch-ua: <span class="hljs-string">&quot; Not A;Brand&quot;</span>;v=<span class="hljs-string">&quot;99&quot;</span>, <span class="hljs-string">&quot;Chromium&quot;</span>;v=<span class="hljs-string">&quot;98&quot;</span>, <span class="hljs-string">&quot;Google Chrome&quot;</span>;v=<span class="hljs-string">&quot;98&quot;</span><br>sec-ch-ua-mobile: ?<span class="hljs-number">1</span><br>sec-ch-ua-platform: <span class="hljs-string">&quot;Android&quot;</span><br>Upgrade-Insecure-Requests: <span class="hljs-number">1</span><br>User-Agent: Mozilla/<span class="hljs-number">5.0</span> (Linux; Android <span class="hljs-number">6.0</span>; Nexus <span class="hljs-number">5</span> Build/MRA58N) AppleWebKit/<span class="hljs-number">537.36</span> (KHTML, like Gecko) Chrome/<span class="hljs-number">98.0</span><span class="hljs-number">.4758</span><span class="hljs-number">.102</span> Mobile Safari/<span class="hljs-number">537.36</span><br>Accept: text/html,application/xhtml+xml,application/xml;q=<span class="hljs-number">0.9</span>,image/avif,image/webp,image/apng,*<span class="hljs-comment">/*;q=0.8,application/signed-exchange;v=b3;q=0.9</span><br><span class="hljs-comment">Sec-Fetch-Site: none</span><br><span class="hljs-comment">Sec-Fetch-Mode: navigate</span><br><span class="hljs-comment">Sec-Fetch-User: ?1</span><br><span class="hljs-comment">Sec-Fetch-Dest: document</span><br><span class="hljs-comment">Accept-Encoding: gzip, deflate, br</span><br><span class="hljs-comment">Accept-Language: zh-CN,zh;q=0.9</span><br><span class="hljs-comment">Cookie: didv=1644894188000; did=web_160a5eac2ed14dbda625edcf277953d1; sid=9995d540410efc97b28229c2; Hm_lvt_86a27b7db2c5c0ae37fee4a8a35033ee=1644894193; Hm_lpvt_86a27b7db2c5c0ae37fee4a8a35033ee=1645090238</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="响应（关键信息-window-pageData-x3D-）：略"><a href="#响应（关键信息-window-pageData-x3D-）：略" class="headerlink" title="响应（关键信息 window.pageData&#x3D;）：略"></a>响应（关键信息 window.pageData&#x3D;）：略</h2><h2 id="互动量相关-JSON-obfuseData："><a href="#互动量相关-JSON-obfuseData：" class="headerlink" title="互动量相关 JSON.obfuseData："></a>互动量相关 JSON.obfuseData：</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs java">&#123;<br>    <span class="hljs-string">&quot;id&quot;</span>: <span class="hljs-number">263</span>,<br>    <span class="hljs-string">&quot;fontCdnUrl&quot;</span>: <span class="hljs-string">&quot;https://tx2.a.kwimgs.com/kos/nlav10312/mdata/pkg/kwai-font/fontscn_263f9585.ttf&quot;</span>,<br>    <span class="hljs-string">&quot;fontCdnStyle&quot;</span>: <span class="hljs-string">&quot;&lt;style&gt;\n        @font-face &#123;\n            font-family: kwaiFont;\n            src: url(https://tx2.a.kwimgs.com/kos/nlav10312/mdata/pkg/kwai-font/fontscn_263f9585.ttf) format(\&quot;truetype\&quot;);\n        &#125;\n        .font &#123;\n            font-family: \&quot;kwaiFont\&quot;;\n            font-style: normal;\n            font-weight: normal;\n            font-variant: normal;\n            text-transform: none;\n            line-height: 1;\n            -webkit-font-smoothing: antialiased;\n        &#125;\n    &lt;/style&gt;&quot;</span>,<br>    <span class="hljs-string">&quot;commentCount&quot;</span>: <span class="hljs-string">&quot;&lt;SPAN STYLE=&#x27;FONT-FAMILY: kwaiFont;&#x27;&gt;&lt;/SPAN&gt;&quot;</span>,<br>    <span class="hljs-string">&quot;likeCount&quot;</span>: <span class="hljs-string">&quot;&lt;SPAN STYLE=&#x27;FONT-FAMILY: kwaiFont;&#x27;&gt;&lt;/SPAN&gt;&quot;</span>,<br>    <span class="hljs-string">&quot;viewCount&quot;</span>: <span class="hljs-string">&quot;&lt;SPAN STYLE=&#x27;FONT-FAMILY: kwaiFont;&#x27;&gt;&lt;/SPAN&gt;&quot;</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h2 id="页面中显示："><a href="#页面中显示：" class="headerlink" title="页面中显示："></a>页面中显示：</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java">&lt;p class=<span class="hljs-string">&quot;video-like&quot;</span>&gt;  &lt;span style=<span class="hljs-string">&quot;FONT-FAMILY: kwaiFont;&quot;</span>&gt;&lt;/span&gt;  &lt;/p&gt;<br></code></pre></td></tr></table></figure>
+
+<p>可以明显看出是有<strong>字体反爬</strong>处理，需要下载字体文件进行解密<br>​</p>
+<h1 id="什么是字体反爬？"><a href="#什么是字体反爬？" class="headerlink" title="什么是字体反爬？"></a>什么是字体反爬？</h1><p>使用自定义的 ttf 文件来渲染网页中的文字，而网页中的文字不再是文字，而是相应的字体编码，通过复制或者简单的采集是无法采集到编码后的文字内容</p>
+<h2 id="字体反爬实现原理"><a href="#字体反爬实现原理" class="headerlink" title="字体反爬实现原理"></a>字体反爬实现原理</h2><p>厂商会随机生成成千上万套字库，并且保存好编码、字库文件、字的映射关系。文章显示的时候会从库中随机查询一套字库，并把文章中的替换成 unicode 编码，以达到字体加密的效果。<br>​</p>
+<h1 id="字体反爬的前世今生"><a href="#字体反爬的前世今生" class="headerlink" title="字体反爬的前世今生"></a>字体反爬的前世今生</h1><h2 id="初级难度：一套字体做加密"><a href="#初级难度：一套字体做加密" class="headerlink" title="初级难度：一套字体做加密"></a>初级难度：一套字体做加密</h2><p>做好映射解密即可</p>
+<h2 id="中级难度：生成多套字体和编码"><a href="#中级难度：生成多套字体和编码" class="headerlink" title="中级难度：生成多套字体和编码"></a>中级难度：生成多套字体和编码</h2><p>比如:<strong>猫眼电影,58 同城等等，汽车之家</strong><br>虽然生成了多套，但是每个字对应的字体信息是不变<br>比如一个字的笔画数，和 x,y 变化都很小，可以利用这个特征解析字体的 xml 文件，做特征映射</p>
+<h2 id="高级难度：字体变形，字体信息随机化"><a href="#高级难度：字体变形，字体信息随机化" class="headerlink" title="高级难度：字体变形，字体信息随机化"></a>高级难度：字体变形，字体信息随机化</h2><p>比如：<strong>快手</strong><br><strong>​</strong></p>
+<h1 id="静态字体解密"><a href="#静态字体解密" class="headerlink" title="静态字体解密"></a>静态字体解密</h1><h2 id="下载字体用-FontCeator-打开"><a href="#下载字体用-FontCeator-打开" class="headerlink" title="下载字体用 FontCeator 打开"></a>下载字体用 FontCeator 打开</h2><p><img src="https://cdn.nlark.com/yuque/0/2022/png/2744235/1645674670513-87b8df4f-6ce8-452c-8080-d5fc3ecc798e.png#clientId=u1652befd-1cd7-4&from=paste&height=170&id=fvt5s&margin=%5Bobject%20Object%5D&name=image.png&originHeight=339&originWidth=1195&originalType=binary%E2%88%B6=1&size=37020&status=done&style=none&taskId=uee898422-626d-4619-b80c-f75f149de1a&width=597.5" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<h2 id="将字体文件转为-xml"><a href="#将字体文件转为-xml" class="headerlink" title="将字体文件转为 xml"></a>将字体文件转为 xml</h2><p>先用 FontCreator 将字体转为 woff 文件，再用 python 转为 xml</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs java">&lt;GlyphID id=<span class="hljs-string">&quot;0&quot;</span> name=<span class="hljs-string">&quot;.notdef&quot;</span>/&gt;<br>&lt;GlyphID id=<span class="hljs-string">&quot;1&quot;</span> name=<span class="hljs-string">&quot;uniEAC6&quot;</span>/&gt;<br>&lt;GlyphID id=<span class="hljs-string">&quot;2&quot;</span> name=<span class="hljs-string">&quot;uniEC96&quot;</span>/&gt;<br>&lt;GlyphID id=<span class="hljs-string">&quot;3&quot;</span> name=<span class="hljs-string">&quot;uniF38C&quot;</span>/&gt;<br>&lt;GlyphID id=<span class="hljs-string">&quot;4&quot;</span> name=<span class="hljs-string">&quot;uniF088&quot;</span>/&gt;<br>&lt;GlyphID id=<span class="hljs-string">&quot;5&quot;</span> name=<span class="hljs-string">&quot;uniEC7E&quot;</span>/&gt;<br>&lt;GlyphID id=<span class="hljs-string">&quot;6&quot;</span> name=<span class="hljs-string">&quot;uniF5D6&quot;</span>/&gt;<br>&lt;GlyphID id=<span class="hljs-string">&quot;7&quot;</span> name=<span class="hljs-string">&quot;uniF20E&quot;</span>/&gt;<br>&lt;GlyphID id=<span class="hljs-string">&quot;8&quot;</span> name=<span class="hljs-string">&quot;uniF7A6&quot;</span>/&gt;<br>&lt;GlyphID id=<span class="hljs-string">&quot;9&quot;</span> name=<span class="hljs-string">&quot;uniF5B9&quot;</span>/&gt;<br>&lt;GlyphID id=<span class="hljs-string">&quot;10&quot;</span> name=<span class="hljs-string">&quot;uniE9D5&quot;</span>/&gt;<br>&lt;GlyphID id=<span class="hljs-string">&quot;11&quot;</span> name=<span class="hljs-string">&quot;uniE43E&quot;</span>/&gt;<br>&lt;GlyphID id=<span class="hljs-string">&quot;12&quot;</span> name=<span class="hljs-string">&quot;uniE729&quot;</span>/&gt;<br>&lt;GlyphID id=<span class="hljs-string">&quot;13&quot;</span> name=<span class="hljs-string">&quot;uniE47F&quot;</span>/&gt;<br>&lt;GlyphID id=<span class="hljs-string">&quot;14&quot;</span> name=<span class="hljs-string">&quot;uniE7CA&quot;</span>/&gt;<br>&lt;GlyphID id=<span class="hljs-string">&quot;15&quot;</span> name=<span class="hljs-string">&quot;uniF6C7&quot;</span>/&gt;<br></code></pre></td></tr></table></figure>
+
+<p>注意：这个 xml 表示的是 id 和值的映射关系。比如 <GlyphID id="11" name="uniE43E"/><br>uniE43E 字体对应真实的值：4 ， 对应的 glyph11</p>
+<h2 id="查看字体解密规则"><a href="#查看字体解密规则" class="headerlink" title="查看字体解密规则"></a>查看字体解密规则</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-string">&quot;commentCount&quot;</span>: <span class="hljs-string">&quot;&lt;SPAN STYLE=&#x27;FONT-FAMILY: kwaiFont;&#x27;&gt;&lt;/SPAN&gt;&quot;</span>,<br></code></pre></td></tr></table></figure>
+
+<p><br>规则：&amp;#+16 进制加上;号</p>
+<h2 id="解密"><a href="#解密" class="headerlink" title="解密"></a>解密</h2><p>逆推字体加密<br>将字体的 key 转为 16 进制，&amp;#+16 进制与加密的对比，得到对应的值</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs java">[ #编写对应的列表<br>    <span class="hljs-string">&#x27;w&#x27;</span>, <span class="hljs-string">&#x27;5&#x27;</span>, <span class="hljs-string">&#x27;m&#x27;</span>, <span class="hljs-string">&#x27;k&#x27;</span>, <span class="hljs-string">&#x27;6&#x27;</span>, <span class="hljs-string">&#x27;.&#x27;</span>, <span class="hljs-string">&#x27;1&#x27;</span>, <span class="hljs-string">&#x27;3&#x27;</span>, <span class="hljs-string">&#x27;+&#x27;</span>, <span class="hljs-string">&#x27;0&#x27;</span>, <span class="hljs-string">&#x27;4&#x27;</span>, <span class="hljs-string">&#x27;8&#x27;</span>, <span class="hljs-string">&#x27;9&#x27;</span>,<br>    <span class="hljs-string">&#x27;7&#x27;</span>, <span class="hljs-string">&#x27;2&#x27;</span><br>]<br><br></code></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs java">fontCdnUrl = <span class="hljs-string">&quot;https://tx2.a.kwimgs.com/kos/nlav10312/mdata/pkg/kwai-font/fontscn_263f9585.ttf&quot;</span><br>key_map = &#123;&#125;<br><br>font_content = requests.get(fontCdnUrl).<span class="hljs-type">content</span><br><span class="hljs-variable">font</span> <span class="hljs-operator">=</span> TTFont(BytesIO(font_content))<br>code = font.getGlyphOrder()[<span class="hljs-number">1</span>:]<br>nums = [<br>    <span class="hljs-string">&#x27;w&#x27;</span>, <span class="hljs-string">&#x27;5&#x27;</span>, <span class="hljs-string">&#x27;m&#x27;</span>, <span class="hljs-string">&#x27;k&#x27;</span>, <span class="hljs-string">&#x27;6&#x27;</span>, <span class="hljs-string">&#x27;.&#x27;</span>, <span class="hljs-string">&#x27;1&#x27;</span>, <span class="hljs-string">&#x27;3&#x27;</span>, <span class="hljs-string">&#x27;+&#x27;</span>, <span class="hljs-string">&#x27;0&#x27;</span>, <span class="hljs-string">&#x27;4&#x27;</span>, <span class="hljs-string">&#x27;8&#x27;</span>, <span class="hljs-string">&#x27;9&#x27;</span>,<br>    <span class="hljs-string">&#x27;7&#x27;</span>, <span class="hljs-string">&#x27;2&#x27;</span><br>]<br>temp = dict(zip(code, nums))<br>res = font.getBestCmap()<br><span class="hljs-keyword">for</span> k, v in res.items(): #解析字体<br>    print(<span class="hljs-string">&quot;字体的原始：&quot;</span> +str(k))<br>    kk = str(hex(k))<br>    print(<span class="hljs-string">&quot;字体的转换成16进制：&quot;</span> + str(kk))<br>    kk = kk[<span class="hljs-number">1</span>:]<br>    print(<span class="hljs-string">&quot;去除前缀：&quot;</span> + str(kk))<br>    kk =<span class="hljs-string">&#x27;&amp;#&#x27;</span> + kk<br>    <span class="hljs-title function_">print</span><span class="hljs-params">(<span class="hljs-string">&quot;拼接&amp;#得到最后加密的：&quot;</span> + str(kk)</span>)<br>    print(str(v)+<span class="hljs-string">&quot;字体对应真实的值：&quot;</span> + str(temp[v]))<br>    key_map[kk] = temp[v]<br>re_html_code = re.compile(r<span class="hljs-string">&#x27;&amp;#x[\da-f]&#123;4&#125;&#x27;</span>)<br>text = <span class="hljs-string">&quot;&quot;</span>  #7751confusionLikeCount=<br>words = re_html_code.findall(text)<br>result = <span class="hljs-string">&#x27;&#x27;</span>.join(key_map[i] <span class="hljs-keyword">for</span> i in words)<br>print(result)<br></code></pre></td></tr></table></figure>
+
+<p>得到 7762， 静态字体破解搞定~<br>​</p>
+<h1 id=""><a href="#" class="headerlink" title=""></a></h1><h1 id="动态字体解密"><a href="#动态字体解密" class="headerlink" title="动态字体解密"></a>动态字体解密</h1><p>每次请求的字体都不一样<br><img src="https://cdn.nlark.com/yuque/0/2022/png/2744235/1645689003491-85cab0c6-f6f1-472d-92ef-7917f46b22ff.png#clientId=u10da156e-2811-4&from=paste&height=337&id=u92a0e3d9&margin=%5Bobject%20Object%5D&name=image.png&originHeight=673&originWidth=1315&originalType=binary%E2%88%B6=1&size=68780&status=done&style=none&taskId=u86848edb-5263-47ec-957a-89923f7d2bc&width=657.5" srcset="/img/loading.gif" lazyload alt="image.png"><br>​</p>
+<p>​</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2022/png/2744235/1645756969520-f17d77e1-fdc6-4c49-aba8-2f2e1efc0471.png#clientId=u0fb3019f-4b33-4&from=paste&height=307&id=u6db364a4&margin=%5Bobject%20Object%5D&name=image.png&originHeight=614&originWidth=495&originalType=binary%E2%88%B6=1&size=37969&status=done&style=none&taskId=u43618a62-3c05-45f4-a6d8-d73ae9c5c5d&width=247.5" srcset="/img/loading.gif" lazyload alt="image.png"><img src="https://cdn.nlark.com/yuque/0/2022/png/2744235/1645757027875-439caa89-4b83-490e-9af8-3ccef99e63f7.png#clientId=u0fb3019f-4b33-4&from=paste&height=307&id=u81403d77&margin=%5Bobject%20Object%5D&name=image.png&originHeight=613&originWidth=407&originalType=binary%E2%88%B6=1&size=32740&status=done&style=none&taskId=u570b17d7-45ca-4ff5-8d87-8abd6b7fb71&width=203.5" srcset="/img/loading.gif" lazyload alt="image.png"><br>可以发现字体的形状不同，无法通过笔画来映射</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><code class="hljs java">&lt;pt x=<span class="hljs-string">&quot;-10158&quot;</span> y=<span class="hljs-string">&quot;550&quot;</span> on=<span class="hljs-string">&quot;1&quot;</span>/&gt;<br>       &lt;pt x=<span class="hljs-string">&quot;-10154&quot;</span> y=<span class="hljs-string">&quot;545&quot;</span> on=<span class="hljs-string">&quot;0&quot;</span>/&gt;<br>       &lt;pt x=<span class="hljs-string">&quot;-10161&quot;</span> y=<span class="hljs-string">&quot;534&quot;</span> on=<span class="hljs-string">&quot;1&quot;</span>/&gt;<br>       &lt;pt x=<span class="hljs-string">&quot;-10160&quot;</span> y=<span class="hljs-string">&quot;350&quot;</span> on=<span class="hljs-string">&quot;0&quot;</span>/&gt;<br>       &lt;pt x=<span class="hljs-string">&quot;-10490&quot;</span> y=<span class="hljs-string">&quot;54&quot;</span> on=<span class="hljs-string">&quot;1&quot;</span>/&gt;<br>       &lt;pt x=<span class="hljs-string">&quot;-10492&quot;</span> y=<span class="hljs-string">&quot;27&quot;</span> on=<span class="hljs-string">&quot;1&quot;</span>/&gt;<br>       &lt;pt x=<span class="hljs-string">&quot;-10492&quot;</span> y=<span class="hljs-string">&quot;5&quot;</span> on=<span class="hljs-string">&quot;1&quot;</span>/&gt;<br>       &lt;pt x=<span class="hljs-string">&quot;-10285&quot;</span> y=<span class="hljs-string">&quot;0&quot;</span> on=<span class="hljs-string">&quot;1&quot;</span>/&gt;<br>       &lt;pt x=<span class="hljs-string">&quot;-10156&quot;</span> y=<span class="hljs-string">&quot;4&quot;</span> on=<span class="hljs-string">&quot;1&quot;</span>/&gt;<br>       &lt;pt x=<span class="hljs-string">&quot;-10031&quot;</span> y=<span class="hljs-string">&quot;-5&quot;</span> on=<span class="hljs-string">&quot;1&quot;</span>/&gt;<br>       &lt;pt x=<span class="hljs-string">&quot;-10035&quot;</span> y=<span class="hljs-string">&quot;16&quot;</span> on=<span class="hljs-string">&quot;1&quot;</span>/&gt;<br>       &lt;pt x=<span class="hljs-string">&quot;-10029&quot;</span> y=<span class="hljs-string">&quot;58&quot;</span> on=<span class="hljs-string">&quot;1&quot;</span>/&gt;<br>       &lt;pt x=<span class="hljs-string">&quot;-10034&quot;</span> y=<span class="hljs-string">&quot;87&quot;</span> on=<span class="hljs-string">&quot;1&quot;</span>/&gt;<br>       &lt;pt x=<span class="hljs-string">&quot;-10232&quot;</span> y=<span class="hljs-string">&quot;75&quot;</span> on=<span class="hljs-string">&quot;1&quot;</span>/&gt;<br>       &lt;pt x=<span class="hljs-string">&quot;-10236&quot;</span> y=<span class="hljs-string">&quot;87&quot;</span> on=<span class="hljs-string">&quot;1&quot;</span>/&gt;<br>       &lt;pt x=<span class="hljs-string">&quot;-10256&quot;</span> y=<span class="hljs-string">&quot;83&quot;</span> on=<span class="hljs-string">&quot;0&quot;</span>/&gt;<br>       &lt;pt x=<span class="hljs-string">&quot;-10300&quot;</span> y=<span class="hljs-string">&quot;83&quot;</span> on=<span class="hljs-string">&quot;1&quot;</span>/&gt;<br>       &lt;pt x=<span class="hljs-string">&quot;-10323&quot;</span> y=<span class="hljs-string">&quot;77&quot;</span> on=<span class="hljs-string">&quot;0&quot;</span>/&gt;<br>       &lt;pt x=<span class="hljs-string">&quot;-10356&quot;</span> y=<span class="hljs-string">&quot;78&quot;</span> on=<span class="hljs-string">&quot;1&quot;</span>/&gt;<br>       &lt;pt x=<span class="hljs-string">&quot;-10116&quot;</span> y=<span class="hljs-string">&quot;306&quot;</span> on=<span class="hljs-string">&quot;0&quot;</span>/&gt;<br>       &lt;pt x=<span class="hljs-string">&quot;-10077&quot;</span> y=<span class="hljs-string">&quot;472&quot;</span> on=<span class="hljs-string">&quot;1&quot;</span>/&gt;<br>       &lt;pt x=<span class="hljs-string">&quot;-10071&quot;</span> y=<span class="hljs-string">&quot;499&quot;</span> on=<span class="hljs-string">&quot;0&quot;</span>/&gt;<br>       &lt;pt x=<span class="hljs-string">&quot;-10066&quot;</span> y=<span class="hljs-string">&quot;529&quot;</span> on=<span class="hljs-string">&quot;1&quot;</span>/&gt;<br>       &lt;pt x=<span class="hljs-string">&quot;-10070&quot;</span> y=<span class="hljs-string">&quot;610&quot;</span> on=<span class="hljs-string">&quot;0&quot;</span>/&gt;<br>       &lt;pt x=<span class="hljs-string">&quot;-10110&quot;</span> y=<span class="hljs-string">&quot;665&quot;</span> on=<span class="hljs-string">&quot;1&quot;</span>/&gt;<br>       &lt;pt x=<span class="hljs-string">&quot;-10119&quot;</span> y=<span class="hljs-string">&quot;688&quot;</span> on=<span class="hljs-string">&quot;0&quot;</span>/&gt;<br>       &lt;pt x=<span class="hljs-string">&quot;-10124&quot;</span> y=<span class="hljs-string">&quot;692&quot;</span> on=<span class="hljs-string">&quot;1&quot;</span>/&gt;<br>       &lt;pt x=<span class="hljs-string">&quot;-10156&quot;</span> y=<span class="hljs-string">&quot;716&quot;</span> on=<span class="hljs-string">&quot;0&quot;</span>/&gt;<br>       &lt;pt x=<span class="hljs-string">&quot;-10201&quot;</span> y=<span class="hljs-string">&quot;737&quot;</span> on=<span class="hljs-string">&quot;1&quot;</span>/&gt;<br>       &lt;pt x=<span class="hljs-string">&quot;-10237&quot;</span> y=<span class="hljs-string">&quot;742&quot;</span> on=<span class="hljs-string">&quot;0&quot;</span>/&gt;<br>       &lt;pt x=<span class="hljs-string">&quot;-10282&quot;</span> y=<span class="hljs-string">&quot;743&quot;</span> on=<span class="hljs-string">&quot;1&quot;</span>/&gt;<br>       &lt;pt x=<span class="hljs-string">&quot;-10394&quot;</span> y=<span class="hljs-string">&quot;740&quot;</span> on=<span class="hljs-string">&quot;0&quot;</span>/&gt;<br>       &lt;pt x=<span class="hljs-string">&quot;-10497&quot;</span> y=<span class="hljs-string">&quot;632&quot;</span> on=<span class="hljs-string">&quot;1&quot;</span>/&gt;<br>       &lt;pt x=<span class="hljs-string">&quot;-10442&quot;</span> y=<span class="hljs-string">&quot;594&quot;</span> on=<span class="hljs-string">&quot;1&quot;</span>/&gt;<br>       &lt;pt x=<span class="hljs-string">&quot;-10441&quot;</span> y=<span class="hljs-string">&quot;592&quot;</span> on=<span class="hljs-string">&quot;1&quot;</span>/&gt;<br>       &lt;pt x=<span class="hljs-string">&quot;-10372&quot;</span> y=<span class="hljs-string">&quot;671&quot;</span> on=<span class="hljs-string">&quot;0&quot;</span>/&gt;<br>       &lt;pt x=<span class="hljs-string">&quot;-10293&quot;</span> y=<span class="hljs-string">&quot;672&quot;</span> on=<span class="hljs-string">&quot;1&quot;</span>/&gt;<br>       &lt;pt x=<span class="hljs-string">&quot;-10226&quot;</span> y=<span class="hljs-string">&quot;677&quot;</span> on=<span class="hljs-string">&quot;0&quot;</span>/&gt;<br>       &lt;pt x=<span class="hljs-string">&quot;-10191&quot;</span> y=<span class="hljs-string">&quot;630&quot;</span> on=<span class="hljs-string">&quot;1&quot;</span>/&gt;<br>       &lt;pt x=<span class="hljs-string">&quot;-10163&quot;</span> y=<span class="hljs-string">&quot;603&quot;</span> on=<span class="hljs-string">&quot;0&quot;</span>/&gt;<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><code class="hljs java">&lt;pt x=<span class="hljs-string">&quot;-9192&quot;</span> y=<span class="hljs-string">&quot;740&quot;</span> on=<span class="hljs-string">&quot;0&quot;</span>/&gt;<br>       &lt;pt x=<span class="hljs-string">&quot;-9129&quot;</span> y=<span class="hljs-string">&quot;740&quot;</span> on=<span class="hljs-string">&quot;1&quot;</span>/&gt;<br>       &lt;pt x=<span class="hljs-string">&quot;-9114&quot;</span> y=<span class="hljs-string">&quot;755&quot;</span> on=<span class="hljs-string">&quot;0&quot;</span>/&gt;<br>       &lt;pt x=<span class="hljs-string">&quot;-9099&quot;</span> y=<span class="hljs-string">&quot;746&quot;</span> on=<span class="hljs-string">&quot;1&quot;</span>/&gt;<br>       &lt;pt x=<span class="hljs-string">&quot;-9037&quot;</span> y=<span class="hljs-string">&quot;747&quot;</span> on=<span class="hljs-string">&quot;0&quot;</span>/&gt;<br>       &lt;pt x=<span class="hljs-string">&quot;-8991&quot;</span> y=<span class="hljs-string">&quot;706&quot;</span> on=<span class="hljs-string">&quot;1&quot;</span>/&gt;<br>       &lt;pt x=<span class="hljs-string">&quot;-8986&quot;</span> y=<span class="hljs-string">&quot;698&quot;</span> on=<span class="hljs-string">&quot;0&quot;</span>/&gt;<br>       &lt;pt x=<span class="hljs-string">&quot;-8973&quot;</span> y=<span class="hljs-string">&quot;696&quot;</span> on=<span class="hljs-string">&quot;1&quot;</span>/&gt;<br>       &lt;pt x=<span class="hljs-string">&quot;-8973&quot;</span> y=<span class="hljs-string">&quot;695&quot;</span> on=<span class="hljs-string">&quot;0&quot;</span>/&gt;<br>       &lt;pt x=<span class="hljs-string">&quot;-8975&quot;</span> y=<span class="hljs-string">&quot;695&quot;</span> on=<span class="hljs-string">&quot;1&quot;</span>/&gt;<br>       &lt;pt x=<span class="hljs-string">&quot;-8917&quot;</span> y=<span class="hljs-string">&quot;624&quot;</span> on=<span class="hljs-string">&quot;0&quot;</span>/&gt;<br>       &lt;pt x=<span class="hljs-string">&quot;-8920&quot;</span> y=<span class="hljs-string">&quot;525&quot;</span> on=<span class="hljs-string">&quot;1&quot;</span>/&gt;<br>       &lt;pt x=<span class="hljs-string">&quot;-8920&quot;</span> y=<span class="hljs-string">&quot;337&quot;</span> on=<span class="hljs-string">&quot;0&quot;</span>/&gt;<br>       &lt;pt x=<span class="hljs-string">&quot;-9203&quot;</span> y=<span class="hljs-string">&quot;69&quot;</span> on=<span class="hljs-string">&quot;1&quot;</span>/&gt;<br>       &lt;pt x=<span class="hljs-string">&quot;-9180&quot;</span> y=<span class="hljs-string">&quot;74&quot;</span> on=<span class="hljs-string">&quot;0&quot;</span>/&gt;<br>       &lt;pt x=<span class="hljs-string">&quot;-9159&quot;</span> y=<span class="hljs-string">&quot;75&quot;</span> on=<span class="hljs-string">&quot;1&quot;</span>/&gt;<br>       &lt;pt x=<span class="hljs-string">&quot;-9102&quot;</span> y=<span class="hljs-string">&quot;79&quot;</span> on=<span class="hljs-string">&quot;0&quot;</span>/&gt;<br>       &lt;pt x=<span class="hljs-string">&quot;-9086&quot;</span> y=<span class="hljs-string">&quot;83&quot;</span> on=<span class="hljs-string">&quot;1&quot;</span>/&gt;<br>       &lt;pt x=<span class="hljs-string">&quot;-9016&quot;</span> y=<span class="hljs-string">&quot;81&quot;</span> on=<span class="hljs-string">&quot;1&quot;</span>/&gt;<br>       &lt;pt x=<span class="hljs-string">&quot;-8878&quot;</span> y=<span class="hljs-string">&quot;77&quot;</span> on=<span class="hljs-string">&quot;1&quot;</span>/&gt;<br>       &lt;pt x=<span class="hljs-string">&quot;-8881&quot;</span> y=<span class="hljs-string">&quot;66&quot;</span> on=<span class="hljs-string">&quot;1&quot;</span>/&gt;<br>       &lt;pt x=<span class="hljs-string">&quot;-8882&quot;</span> y=<span class="hljs-string">&quot;13&quot;</span> on=<span class="hljs-string">&quot;1&quot;</span>/&gt;<br>       &lt;pt x=<span class="hljs-string">&quot;-8881&quot;</span> y=<span class="hljs-string">&quot;-3&quot;</span> on=<span class="hljs-string">&quot;1&quot;</span>/&gt;<br>       &lt;pt x=<span class="hljs-string">&quot;-8917&quot;</span> y=<span class="hljs-string">&quot;-1&quot;</span> on=<span class="hljs-string">&quot;1&quot;</span>/&gt;<br>       &lt;pt x=<span class="hljs-string">&quot;-9346&quot;</span> y=<span class="hljs-string">&quot;2&quot;</span> on=<span class="hljs-string">&quot;1&quot;</span>/&gt;<br>       &lt;pt x=<span class="hljs-string">&quot;-9340&quot;</span> y=<span class="hljs-string">&quot;50&quot;</span> on=<span class="hljs-string">&quot;1&quot;</span>/&gt;<br>       &lt;pt x=<span class="hljs-string">&quot;-9345&quot;</span> y=<span class="hljs-string">&quot;58&quot;</span> on=<span class="hljs-string">&quot;1&quot;</span>/&gt;<br>       &lt;pt x=<span class="hljs-string">&quot;-9008&quot;</span> y=<span class="hljs-string">&quot;348&quot;</span> on=<span class="hljs-string">&quot;0&quot;</span>/&gt;<br>       &lt;pt x=<span class="hljs-string">&quot;-9006&quot;</span> y=<span class="hljs-string">&quot;534&quot;</span> on=<span class="hljs-string">&quot;1&quot;</span>/&gt;<br>       &lt;pt x=<span class="hljs-string">&quot;-9003&quot;</span> y=<span class="hljs-string">&quot;552&quot;</span> on=<span class="hljs-string">&quot;0&quot;</span>/&gt;<br>       &lt;pt x=<span class="hljs-string">&quot;-9008&quot;</span> y=<span class="hljs-string">&quot;574&quot;</span> on=<span class="hljs-string">&quot;1&quot;</span>/&gt;<br>       &lt;pt x=<span class="hljs-string">&quot;-9016&quot;</span> y=<span class="hljs-string">&quot;607&quot;</span> on=<span class="hljs-string">&quot;0&quot;</span>/&gt;<br>       &lt;pt x=<span class="hljs-string">&quot;-9036&quot;</span> y=<span class="hljs-string">&quot;635&quot;</span> on=<span class="hljs-string">&quot;1&quot;</span>/&gt;<br>       &lt;pt x=<span class="hljs-string">&quot;-9049&quot;</span> y=<span class="hljs-string">&quot;639&quot;</span> on=<span class="hljs-string">&quot;0&quot;</span>/&gt;<br>       &lt;pt x=<span class="hljs-string">&quot;-9063&quot;</span> y=<span class="hljs-string">&quot;648&quot;</span> on=<span class="hljs-string">&quot;1&quot;</span>/&gt;<br>       &lt;pt x=<span class="hljs-string">&quot;-9072&quot;</span> y=<span class="hljs-string">&quot;660&quot;</span> on=<span class="hljs-string">&quot;0&quot;</span>/&gt;<br>       &lt;pt x=<span class="hljs-string">&quot;-9080&quot;</span> y=<span class="hljs-string">&quot;658&quot;</span> on=<span class="hljs-string">&quot;1&quot;</span>/&gt;<br>       &lt;pt x=<span class="hljs-string">&quot;-9077&quot;</span> y=<span class="hljs-string">&quot;662&quot;</span> on=<span class="hljs-string">&quot;0&quot;</span>/&gt;<br>       &lt;pt x=<span class="hljs-string">&quot;-9083&quot;</span> y=<span class="hljs-string">&quot;669&quot;</span> on=<span class="hljs-string">&quot;1&quot;</span>/&gt;<br>       &lt;pt x=<span class="hljs-string">&quot;-9107&quot;</span> y=<span class="hljs-string">&quot;671&quot;</span> on=<span class="hljs-string">&quot;0&quot;</span>/&gt;<br>       &lt;pt x=<span class="hljs-string">&quot;-9144&quot;</span> y=<span class="hljs-string">&quot;676&quot;</span> on=<span class="hljs-string">&quot;1&quot;</span>/&gt;<br>       &lt;pt x=<span class="hljs-string">&quot;-9163&quot;</span> y=<span class="hljs-string">&quot;678&quot;</span> on=<span class="hljs-string">&quot;0&quot;</span>/&gt;<br>       &lt;pt x=<span class="hljs-string">&quot;-9187&quot;</span> y=<span class="hljs-string">&quot;672&quot;</span> on=<span class="hljs-string">&quot;1&quot;</span>/&gt;<br>       &lt;pt x=<span class="hljs-string">&quot;-9206&quot;</span> y=<span class="hljs-string">&quot;651&quot;</span> on=<span class="hljs-string">&quot;0&quot;</span>/&gt;<br>       &lt;pt x=<span class="hljs-string">&quot;-9229&quot;</span> y=<span class="hljs-string">&quot;648&quot;</span> on=<span class="hljs-string">&quot;1&quot;</span>/&gt;<br>       &lt;pt x=<span class="hljs-string">&quot;-9263&quot;</span> y=<span class="hljs-string">&quot;626&quot;</span> on=<span class="hljs-string">&quot;0&quot;</span>/&gt;<br>       &lt;pt x=<span class="hljs-string">&quot;-9293&quot;</span> y=<span class="hljs-string">&quot;586&quot;</span> on=<span class="hljs-string">&quot;1&quot;</span>/&gt;<br>       &lt;pt x=<span class="hljs-string">&quot;-9314&quot;</span> y=<span class="hljs-string">&quot;600&quot;</span> on=<span class="hljs-string">&quot;1&quot;</span>/&gt;<br>       &lt;pt x=<span class="hljs-string">&quot;-9326&quot;</span> y=<span class="hljs-string">&quot;628&quot;</span> on=<span class="hljs-string">&quot;1&quot;</span>/&gt;<br>       &lt;pt x=<span class="hljs-string">&quot;-9349&quot;</span> y=<span class="hljs-string">&quot;639&quot;</span> on=<span class="hljs-string">&quot;1&quot;</span>/&gt;<br>       &lt;pt x=<span class="hljs-string">&quot;-9304&quot;</span> y=<span class="hljs-string">&quot;686&quot;</span> on=<span class="hljs-string">&quot;0&quot;</span>/&gt;<br>       &lt;pt x=<span class="hljs-string">&quot;-9259&quot;</span> y=<span class="hljs-string">&quot;716&quot;</span> on=<span class="hljs-string">&quot;1&quot;</span>/&gt;<br>       &lt;pt x=<span class="hljs-string">&quot;-9251&quot;</span> y=<span class="hljs-string">&quot;717&quot;</span> on=<span class="hljs-string">&quot;0&quot;</span>/&gt;<br>       &lt;pt x=<span class="hljs-string">&quot;-9242&quot;</span> y=<span class="hljs-string">&quot;719&quot;</span> on=<span class="hljs-string">&quot;1&quot;</span>/&gt;<br></code></pre></td></tr></table></figure>
+
+<p>​</p>
+<p>经过下载多个字体文件查看，发现如下：</p>
+<ul>
+<li>每次请求都是不同的字体，字体库不是简单的几套</li>
+<li>笔画数不同</li>
+<li>x,y 坐标不同，并且移动很大</li>
+</ul>
+<p>所以无法通过解析字体的 xml 利用有规律的特征来做映射<br><strong>​</strong></p>
+<h2 id="思路一："><a href="#思路一：" class="headerlink" title="思路一："></a>思路一：</h2><p>将获取到的加密字段自己组装成 html 显示后，截图，ocr 识别出来</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">style</span>&gt;</span><span class="language-css"></span><br><span class="language-css">  <span class="hljs-keyword">@font-face</span> &#123;</span><br><span class="language-css">    <span class="hljs-attribute">font-family</span>: kwaiFont;</span><br><span class="language-css">    <span class="hljs-attribute">src</span>: <span class="hljs-built_in">url</span>(<span class="hljs-string">https://tx2.a.kwimgs.com/kos/nlav10312/mdata/pkg/kwai-font/fontscn_28789ff8.ttf</span>)</span><br><span class="language-css">      <span class="hljs-built_in">format</span>(<span class="hljs-string">&quot;truetype&quot;</span>);</span><br><span class="language-css">  &#125;</span><br><span class="language-css">  <span class="hljs-selector-class">.font</span> &#123;</span><br><span class="language-css">    <span class="hljs-attribute">font-family</span>: <span class="hljs-string">&quot;kwaiFont&quot;</span>;</span><br><span class="language-css">    <span class="hljs-attribute">font-style</span>: normal;</span><br><span class="language-css">    <span class="hljs-attribute">font-weight</span>: normal;</span><br><span class="language-css">    <span class="hljs-attribute">font-variant</span>: normal;</span><br><span class="language-css">    <span class="hljs-attribute">text-transform</span>: none;</span><br><span class="language-css">    <span class="hljs-attribute">line-height</span>: <span class="hljs-number">1</span>;</span><br><span class="language-css">    -webkit-<span class="hljs-attribute">font-smoothing</span>: antialiased;</span><br><span class="language-css">  &#125;</span><br><span class="language-css"></span><span class="hljs-tag">&lt;/<span class="hljs-name">style</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span><br>  <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">STYLE</span>=<span class="hljs-string">&quot;FONT-FAMILY: kwaiFont;&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.nlark.com/yuque/0/2022/png/2744235/1645773077034-664067aa-d97f-4459-be6d-ae1696d7b079.png#clientId=u1c35ade9-6362-4&from=paste&height=52&id=u0291bcea&margin=%5Bobject%20Object%5D&name=image.png&originHeight=104&originWidth=798&originalType=binary%E2%88%B6=1&size=9949&status=done&style=none&taskId=u5f27e365-4b12-4cef-9151-1064868478c&width=399" srcset="/img/loading.gif" lazyload alt="image.png"><br>​</p>
+<p>​</p>
+<h3 id="保存为-html"><a href="#保存为-html" class="headerlink" title="保存为 html"></a>保存为 html</h3><p>略</p>
+<h3 id="截图"><a href="#截图" class="headerlink" title="截图"></a>截图</h3><p>略</p>
+<h3 id="OCR-识别"><a href="#OCR-识别" class="headerlink" title="OCR 识别"></a>OCR 识别</h3><p>略<br>​</p>
+<p>​</p>
+<h2 id="思路二"><a href="#思路二" class="headerlink" title="思路二"></a>思路二</h2><p>将字体文件字体分割为 png，ocr 识别成出来。放入集合按顺序排列<br>​</p>
+<h3 id="下载安装-tesseract-ocr"><a href="#下载安装-tesseract-ocr" class="headerlink" title="下载安装 tesseract-ocr"></a>下载安装 tesseract-ocr</h3><p>​</p>
+<h3 id="下载语言包"><a href="#下载语言包" class="headerlink" title="下载语言包"></a>下载语言包</h3><p><a target="_blank" rel="noopener" href="https://tesseract-ocr.github.io/tessdoc/Data-Files">https://tesseract-ocr.github.io/tessdoc/Data-Files</a><br>放入 Tesseract-OCR\tessdata</p>
+<h3 id="配置环境变量"><a href="#配置环境变量" class="headerlink" title="配置环境变量"></a>配置环境变量</h3><h3 id="将字体切割成图片代码"><a href="#将字体切割成图片代码" class="headerlink" title="将字体切割成图片代码"></a>将字体切割成图片代码</h3><p>​</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs html">def uni_2_png_stream(txt, font, img_size=512): &quot;&quot;&quot;将字形转化为图片流 Args: txt<br>([type]): [description] font ([type]): [description] img_size (int, optional):<br>[description]. Defaults to 512. Returns: [type]: [description] &quot;&quot;&quot; img =<br>Image.new(&#x27;1&#x27;, (img_size, img_size), 255) draw = ImageDraw.Draw(img) font =<br>ImageFont.truetype(font, int(img_size * 0.7)) txt = chr(txt) x, y =<br>draw.textsize(txt, font=font) draw.text(((img_size - x) // 2, (img_size - y) //<br>2), txt, font=font, fill=0) # draw.text((0,0), txt, font=font, fill=0) return<br>img<br></code></pre></td></tr></table></figure>
+
+<p>​</p>
+<h3 id="对比-ocr-效果"><a href="#对比-ocr-效果" class="headerlink" title="对比 ocr 效果"></a>对比 ocr 效果</h3><p><img src="https://cdn.nlark.com/yuque/0/2022/png/2744235/1646013696797-60dba5bf-7be5-4047-9ddf-aaf9f8db14e0.png#clientId=u211035ad-afac-4&from=paste&height=225&id=u0b24eb20&margin=%5Bobject%20Object%5D&name=image.png&originHeight=450&originWidth=1683&originalType=binary%E2%88%B6=1&size=61090&status=done&style=none&taskId=uf9f87274-a55c-4ed7-8436-1ad6a917c2b&width=841.5" srcset="/img/loading.gif" lazyload alt="image.png"><br>uniE43E 字体对应真实的值：4<br>uniE47F 字体对应真实的值：9<br>uniE729 字体对应真实的值：8<br>uniE7CA 字体对应真实的值：7<br>uniE9D5 字体对应真实的值：0<br>uniEAC6 字体对应真实的值：w<br>uniEC7E 字体对应真实的值：6<br>uniEC96 字体对应真实的值：D<br>uniF088 字体对应真实的值：k<br>uniF20E 字体对应真实的值：1<br>uniF38C 字体对应真实的值：m<br>uniF5B9 字体对应真实的值：+<br>uniF5D6 字体对应真实的值：.<br>uniF6C7 字体对应真实的值：2<br>uniF7A6 字体对应真实的值：3<br>​</p>
+<p>可以看出来识别率 90%，数字 5 识别成 D 了。</p>
+<h3 id="优化数字识别率-和-ocr-执行时间"><a href="#优化数字识别率-和-ocr-执行时间" class="headerlink" title="优化数字识别率 和 ocr 执行时间"></a>优化数字识别率 和 ocr 执行时间</h3><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs html">pytesseract.pytesseract.tesseract_cmd = filename # text =<br>pytesseract.image_to_string(image, lang=&#x27;chi_sim&#x27;, config=&#x27;--psm 10&#x27;) # 注意<br>这里替换语言库，提升纯数字识别准确率 和 执行时间 11秒 提升到6秒 text =<br>pytesseract.image_to_string(image, config=&#x27;--psm 10&#x27;)<br></code></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.nlark.com/yuque/0/2022/png/2744235/1646018712079-63fb9897-24a8-4b7a-b11b-0a3e99afd54d.png#clientId=u211035ad-afac-4&from=paste&height=227&id=u4e9703cd&margin=%5Bobject%20Object%5D&name=image.png&originHeight=453&originWidth=1648&originalType=binary%E2%88%B6=1&size=61563&status=done&style=none&taskId=u7f99611a-6f09-47d5-9d9c-5338d281dd4&width=824" srcset="/img/loading.gif" lazyload alt="image.png"><br>测试了几个 font 文件，数字识别率 100%</p>
+<h1 id="继续优化"><a href="#继续优化" class="headerlink" title="继续优化"></a>继续优化</h1><h2 id="tesseract："><a href="#tesseract：" class="headerlink" title="tesseract："></a>tesseract：</h2><p>nums:[‘Ww’, ‘+’, ‘4’, ‘9’, ‘2’, ‘6’, ‘mM’, ‘8’, ‘’, ‘7’, ‘3’, ‘k’, ‘5’, ‘0’, ‘1’]<br>INFO: 127.0.0.1:2629 - “GET &#x2F;api&#x2F;ks_interactive_data&#x2F;3xdyxk622whqx2q HTTP&#x2F;1.1” 200 OK<br>2022-03-01 12:28:14.721 | WARNING | utils:ocr_processor:146 - 识别耗时：2227.240800857544<br>2022-03-01 12:28:14.722 | WARNING | <strong>main</strong>:request:123 - result:0_2_65<br>2022-03-01 12:28:14.723 | WARNING | <strong>main</strong>:request:124 - 耗时:3415.691375732422</p>
+<h2 id="更换-ocr-识别后："><a href="#更换-ocr-识别后：" class="headerlink" title="更换 ocr 识别后："></a>更换 ocr 识别后：</h2><p>2022-03-01 12:31:36.279 | WARNING | utils:ocr_processor:146 - 识别耗时：131.30450248718262<br>nums:[‘’, ‘7’, ‘w’, ‘2’, ‘0’, ‘9’, ‘6’, ‘3’, ‘十’, ‘4’, ‘8’, ‘5’, ‘k’, ‘1’, ‘m’]<br>INFO: 127.0.0.1:2923 - “GET &#x2F;api&#x2F;ks_interactive_data&#x2F;3xdyxk622whqx2q HTTP&#x2F;1.1” 200 OK<br>2022-03-01 12:31:36.290 | WARNING | <strong>main</strong>:request:123 - result:0_2_65<br>2022-03-01 12:31:36.290 | WARNING | <strong>main</strong>:request:124 - 耗时:1669.9013710021973<br>​</p>
+<h1 id="DID-风控解决"><a href="#DID-风控解决" class="headerlink" title="DID 风控解决"></a>DID 风控解决</h1><p>待下篇分解</p>
+<h2 id="大规模测试："><a href="#大规模测试：" class="headerlink" title="大规模测试："></a>大规模测试：</h2><p><strong>10 个线程，单 IP，5 个小时一共跑了 62264 次，失败次数 3266，成功率 94%</strong></p>
+<p><strong>平均一个小时 12452 次。</strong><br><strong>​</strong></p>
+<p><strong>单个请求 2 秒以内完成。1 秒 4 和 1 秒 8 居多，通过 redis 预存 did 的话，可以进一步提升耗时到 1 秒以内。</strong><br>​</p>
+<p>警告：仅供学习和参考，不可用于非法用途！<br>​</p>
+
+              
+            </div>
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>快手H5逆向，字体反爬，互动量获取</div>
+      <div>http://blog.uzilol.cn/2022/02/24/yuque/%E5%BF%AB%E6%89%8BH5%E9%80%86%E5%90%91%EF%BC%8C%E5%AD%97%E4%BD%93%E5%8F%8D%E7%88%AC%EF%BC%8C%E4%BA%92%E5%8A%A8%E9%87%8F%E8%8E%B7%E5%8F%96/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>ive_e （leoli）</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2022年2月24日</div>
+        </div>
+      
+      
+      <div class="license-meta-item">
+        <div>许可协议</div>
+        <div>
+          
+            
+            
+              <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+              <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                <i class="iconfont icon-by"></i>
+              </span>
+              </a>
+            
+          
+        </div>
+      </div>
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/02/24/yuque/pixel%203a%EF%BC%88sargo%EF%BC%89%E5%88%B7%E6%9C%BA/" title="pixel 3a（sargo）刷机">
+                        <span class="hidden-mobile">pixel 3a（sargo）刷机</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var title = subtitle.title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      headingSelector : CONFIG.toc.headingSelector || 'h1,h2,h3,h4,h5,h6',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      collapseDepth   : CONFIG.toc.collapseDepth || 0,
+      scrollSmooth    : true,
+      headingsOffset  : -boardTop
+    });
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+  });
+</script>
+
+
+  <script>
+  (function() {
+    var enableLang = CONFIG.code_language.enable && CONFIG.code_language.default;
+    var enableCopy = CONFIG.copy_btn;
+    if (!enableLang && !enableCopy) {
+      return;
+    }
+
+    function getBgClass(ele) {
+      return Fluid.utils.getBackgroundLightness(ele) >= 0 ? 'code-widget-light' : 'code-widget-dark';
+    }
+
+    var copyTmpl = '';
+    copyTmpl += '<div class="code-widget">';
+    copyTmpl += 'LANG';
+    copyTmpl += '</div>';
+    jQuery('.markdown-body pre').each(function() {
+      var $pre = jQuery(this);
+      if ($pre.find('code.mermaid').length > 0) {
+        return;
+      }
+      if ($pre.find('span.line').length > 0) {
+        return;
+      }
+
+      var lang = '';
+
+      if (enableLang) {
+        lang = CONFIG.code_language.default;
+        if ($pre[0].children.length > 0 && $pre[0].children[0].classList.length >= 2 && $pre.children().hasClass('hljs')) {
+          lang = $pre[0].children[0].classList[1];
+        } else if ($pre[0].getAttribute('data-language')) {
+          lang = $pre[0].getAttribute('data-language');
+        } else if ($pre.parent().hasClass('sourceCode') && $pre[0].children.length > 0 && $pre[0].children[0].classList.length >= 2) {
+          lang = $pre[0].children[0].classList[1];
+          $pre.parent().addClass('code-wrapper');
+        } else if ($pre.parent().hasClass('markdown-body') && $pre[0].classList.length === 0) {
+          $pre.wrap('<div class="code-wrapper"></div>');
+        }
+        lang = lang.toUpperCase().replace('NONE', CONFIG.code_language.default);
+      }
+      $pre.append(copyTmpl.replace('LANG', lang).replace('code-widget">',
+        getBgClass($pre[0]) + (enableCopy ? ' code-widget copy-btn" data-clipboard-snippet><i class="iconfont icon-copy"></i>' : ' code-widget">')));
+
+      if (enableCopy) {
+        Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js', function() {
+          var clipboard = new window.ClipboardJS('.copy-btn', {
+            target: function(trigger) {
+              var nodes = trigger.parentNode.childNodes;
+              for (var i = 0; i < nodes.length; i++) {
+                if (nodes[i].tagName === 'CODE') {
+                  return nodes[i];
+                }
+              }
+            }
+          });
+          clipboard.on('success', function(e) {
+            e.clearSelection();
+            e.trigger.innerHTML = e.trigger.innerHTML.replace('icon-copy', 'icon-success');
+            setTimeout(function() {
+              e.trigger.innerHTML = e.trigger.innerHTML.replace('icon-success', 'icon-copy');
+            }, 2000);
+          });
+        });
+      }
+    });
+  })();
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

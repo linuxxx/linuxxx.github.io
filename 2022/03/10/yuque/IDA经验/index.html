@@ -16,23 +16,21 @@
   <meta name="author" content="ive_e （leoli）">
   <meta name="keywords" content="frida unidbg 快手 抖音 淘宝 爬虫">
   
-    <meta name="description" content="twrp 官网 devices 下载对应版本的 twrp img 和 zipimg 为临时 twrp选择最后一个。3.6.0 测试会失败，原因未知。 adb reboot bootloader 在 bootloader 模式下1234PS E:\rom\twrp&gt; fastboot boot .\twrp-3.3.1-0-sargo.imgSending &amp;#x27;boot.img&amp;#x2">
+    <meta name="description" content="TAB 键可以在 F5 与汇编代码来回跳转 so 层的函数参数&#x2F;&#x2F; 第一个参数是 env&#x2F;&#x2F; 第二个参数，实例方法是 jobject，静态方法是 jclazz，直接填 0，一般用不到。 **在第一个参数上按 y，输入 JNIEnv* **， jni 的 api 就被识别出来了 重命名参数按 N 在其他参数上重命名 跳转到指定地址按 G R0-R3 寄存器根据">
 <meta property="og:type" content="article">
-<meta property="og:title" content="pixel 3a（sargo）刷机">
-<meta property="og:url" content="http://blog.uzilol.cn/2022/02/24/yuque/pixel%203a%EF%BC%88sargo%EF%BC%89%E5%88%B7%E6%9C%BA/index.html">
+<meta property="og:title" content="IDA经验">
+<meta property="og:url" content="http://blog.uzilol.cn/2022/03/10/yuque/IDA%E7%BB%8F%E9%AA%8C/index.html">
 <meta property="og:site_name" content="逆向的尾巴">
-<meta property="og:description" content="twrp 官网 devices 下载对应版本的 twrp img 和 zipimg 为临时 twrp选择最后一个。3.6.0 测试会失败，原因未知。 adb reboot bootloader 在 bootloader 模式下1234PS E:\rom\twrp&gt; fastboot boot .\twrp-3.3.1-0-sargo.imgSending &amp;#x27;boot.img&amp;#x2">
+<meta property="og:description" content="TAB 键可以在 F5 与汇编代码来回跳转 so 层的函数参数&#x2F;&#x2F; 第一个参数是 env&#x2F;&#x2F; 第二个参数，实例方法是 jobject，静态方法是 jclazz，直接填 0，一般用不到。 **在第一个参数上按 y，输入 JNIEnv* **， jni 的 api 就被识别出来了 重命名参数按 N 在其他参数上重命名 跳转到指定地址按 G R0-R3 寄存器根据">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2022/png/2744235/1645668514390-78640d53-cba7-43a9-b36b-d6e45fc790c9.png#clientId=u255e42db-bb00-4&from=paste&height=361&id=ud13a490e&margin=%5Bobject%20Object%5D&name=image.png&originHeight=721&originWidth=830&originalType=binary%E2%88%B6=1&size=112655&status=done&style=none&taskId=u7cbf71eb-5417-422e-945d-b61c355f65f&width=415">
-<meta property="article:published_time" content="2022-02-24T02:07:40.000Z">
-<meta property="article:modified_time" content="2022-03-14T06:33:15.491Z">
+<meta property="article:published_time" content="2022-03-10T06:49:53.000Z">
+<meta property="article:modified_time" content="2022-03-14T06:56:07.407Z">
 <meta property="article:author" content="ive_e （leoli）">
 <meta property="article:tag" content="frida unidbg 快手 抖音 淘宝 爬虫">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2022/png/2744235/1645668514390-78640d53-cba7-43a9-b36b-d6e45fc790c9.png#clientId=u255e42db-bb00-4&from=paste&height=361&id=ud13a490e&margin=%5Bobject%20Object%5D&name=image.png&originHeight=721&originWidth=830&originalType=binary%E2%88%B6=1&size=112655&status=done&style=none&taskId=u7cbf71eb-5417-422e-945d-b61c355f65f&width=415">
   
   
-  <title>pixel 3a（sargo）刷机 - 逆向的尾巴</title>
+  <title>IDA经验 - 逆向的尾巴</title>
 
   <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
 
@@ -188,7 +186,7 @@
     <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
-          <span id="subtitle" title="pixel 3a（sargo）刷机">
+          <span id="subtitle" title="IDA经验">
             
           </span>
         </div>
@@ -200,8 +198,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2022-02-24 10:07" pubdate>
-          2022年2月24日 上午
+        <time datetime="2022-03-10 14:49" pubdate>
+          2022年3月10日 下午
         </time>
       </span>
     
@@ -213,7 +211,7 @@
         <i class="iconfont icon-chart"></i>
         
           <!-- compatible with older versions-->
-          689 字
+          1.8k 字
         
       </span>
     
@@ -225,7 +223,7 @@
         
         
           <!-- compatible with older versions-->
-          6 分钟
+          16 分钟
         
       </span>
     
@@ -263,20 +261,22 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">pixel 3a（sargo）刷机</h1>
+            <h1 style="display: none">IDA经验</h1>
             
             <div class="markdown-body">
               
-              <h1 id="twrp-官网-devices-下载对应版本的-twrp-img-和-zip"><a href="#twrp-官网-devices-下载对应版本的-twrp-img-和-zip" class="headerlink" title="twrp 官网 devices 下载对应版本的 twrp img 和 zip"></a>twrp 官网 devices 下载对应版本的 twrp img 和 zip</h1><p>img 为临时 twrp<br><img src="https://cdn.nlark.com/yuque/0/2022/png/2744235/1645668514390-78640d53-cba7-43a9-b36b-d6e45fc790c9.png#clientId=u255e42db-bb00-4&from=paste&height=361&id=ud13a490e&margin=%5Bobject%20Object%5D&name=image.png&originHeight=721&originWidth=830&originalType=binary%E2%88%B6=1&size=112655&status=done&style=none&taskId=u7cbf71eb-5417-422e-945d-b61c355f65f&width=415" srcset="/img/loading.gif" lazyload alt="image.png"><br>选择最后一个。3.6.0 测试会失败，原因未知。</p>
-<h1 id="adb-reboot-bootloader-在-bootloader-模式下"><a href="#adb-reboot-bootloader-在-bootloader-模式下" class="headerlink" title="adb reboot bootloader 在 bootloader 模式下"></a>adb reboot bootloader 在 bootloader 模式下</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs java">PS E:\rom\twrp&gt; fastboot boot .\twrp-<span class="hljs-number">3.3</span><span class="hljs-number">.1</span>-<span class="hljs-number">0</span>-sargo.img<br>Sending <span class="hljs-string">&#x27;boot.img&#x27;</span> (<span class="hljs-number">65536</span> KB)                      OKAY [  <span class="hljs-number">2.</span>012s]<br>Booting                                            OKAY [  <span class="hljs-number">5.</span>911s]<br>Finished. Total time: <span class="hljs-number">7.</span>970s<br></code></pre></td></tr></table></figure>
+              <p>TAB 键可以在 F5 与汇编代码来回跳转</p>
+<h1 id="so-层的函数参数"><a href="#so-层的函数参数" class="headerlink" title="so 层的函数参数"></a>so 层的函数参数</h1><p>&#x2F;&#x2F; 第一个参数是 env<br>&#x2F;&#x2F; 第二个参数，实例方法是 jobject，静态方法是 jclazz，直接填 0，一般用不到。</p>
+<p>**在第一个参数上按 y，输入 JNIEnv* **， jni 的 api 就被识别出来了</p>
+<h1 id="重命名参数"><a href="#重命名参数" class="headerlink" title="重命名参数"></a>重命名参数</h1><p>按 N 在其他参数上重命名</p>
+<h1 id="跳转到指定地址"><a href="#跳转到指定地址" class="headerlink" title="跳转到指定地址"></a>跳转到指定地址</h1><p>按 G</p>
+<h1 id="R0-R3-寄存器"><a href="#R0-R3-寄存器" class="headerlink" title="R0-R3 寄存器"></a>R0-R3 寄存器</h1><p>根据 ARM 调用约定，入参前四个分别通过 R0-R3 调用，返回值通过 R0 返回</p>
+<h1 id="加密常量转-16-进制"><a href="#加密常量转-16-进制" class="headerlink" title="加密常量转 16 进制"></a>加密常量转 16 进制</h1><p>按 H 转为 16 进制</p>
+<p>代码中多次出现 sub_3151C，进去看一看。<br>一个哈希算法，可以简单划分成填充和加密两部分，直接 Hook 加密函数，打印入参和出参，发现 IV 和 block 没有变化，说明填充是没有魔改的。魔改的是加密算法本身。<br><strong>魔改的是算法本身，因为运算函数的入参是正常的、填充后的明文，所以不存在自定义填充、或者对明文做变换的可能，出参即是输出的结果，所以算法并不是在标准流程之后做了一些自定义步骤，它修改的——就是算法本身。</strong></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs html">public void hook_3151C()&#123; // 获取HookZz对象 IHookZz hookZz =<br>HookZz.getInstance(emulator); // 加载HookZz，支持inline<br>hook，文档看https://github.com/jmpews/HookZz // enable hook<br>hookZz.enable_arm_arm64_b_branch(); // 测试enable_arm_arm64_b_branch，可有可无<br>// hook MDStringOld hookZz.wrap(module.base + 0x3151C + 1, new<br>WrapCallback<span class="hljs-tag">&lt;<span class="hljs-name">HookZzArm32RegisterContext</span></span><br><span class="hljs-tag">  &gt;</span>() &#123; // inline wrap导出函数 @Override // 方法执行前 public void<br>  preCall(Emulator&lt;?&gt;<br>  emulator, HookZzArm32RegisterContext ctx, HookEntryInfo info) &#123; // 类似于Frida<br>  args[0] Pointer input = ctx.getPointerArg(0); byte[] inputhex =<br>  input.getByteArray(0, 20); Inspector.inspect(inputhex, &quot;IV&quot;); Pointer text =<br>  ctx.getPointerArg(1); byte[] texthex = text.getByteArray(0, 64);<br>  Inspector.inspect(texthex, &quot;block&quot;); ctx.push(input); ctx.push(text); &#125;;<br>  @Override // 方法执行后 public void postCall(Emulator&lt;?&gt;<br>  emulator, HookZzArm32RegisterContext ctx, HookEntryInfo info) &#123; Pointer text =<br>  ctx.pop(); Pointer IV = ctx.pop(); byte[] IVhex = IV.getByteArray(0, 20);<br>  Inspector.inspect(IVhex, &quot;IV&quot;); byte[] outputhex = text.getByteArray(0, 64);<br>  Inspector.inspect(outputhex, &quot;block out&quot;); &#125; &#125;);<br>  hookZz.disable_arm_arm64_b_branch(); &#125;;<br><span class="hljs-tag">&lt;/<span class="hljs-name">HookZzArm32RegisterContext</span>&gt;</span><br></code></pre></td></tr></table></figure>
 
-<h1 id="adb-push-zip-到-x2F-sdcard"><a href="#adb-push-zip-到-x2F-sdcard" class="headerlink" title="adb push zip 到&#x2F;sdcard"></a>adb push zip 到&#x2F;sdcard</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs java">PS E:\rom\twrp&gt; adb push .\twrp-installer-<span class="hljs-number">3.3</span><span class="hljs-number">.1</span>-<span class="hljs-number">1</span>-sargo.zip /sdcard<br>.\twrp-installer-<span class="hljs-number">3.3</span><span class="hljs-number">.1</span>-<span class="hljs-number">1</span>-sargo.zip: <span class="hljs-number">1</span> file pushed, <span class="hljs-number">0</span> skipped. <span class="hljs-number">69.3</span> MB/s (<span class="hljs-number">10103558</span> bytes in <span class="hljs-number">0.</span>139s)<br>PS E:\rom\twrp&gt;<br></code></pre></td></tr></table></figure>
-
-<h1 id="在-twrp-中-install-选择-zip-包进行安装"><a href="#在-twrp-中-install-选择-zip-包进行安装" class="headerlink" title="在 twrp 中 install 选择 zip 包进行安装"></a>在 twrp 中 install 选择 zip 包进行安装</h1><p>reboot system， 选择 do not install ok 完成~ twrp 的输入</p>
-<h1 id="安装面具"><a href="#安装面具" class="headerlink" title="安装面具"></a>安装面具</h1><p>安装 magisk.apk . 选择修补一个文件，选择 rom 解压出来的 boot.img<br>修补后会在 boot.img 的同文件夹下生成一个 magisk_patched.img 文件，传回电脑</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs java">adb reboot bootloader<br>fastboot flash boot magisk_patched-23000_PUUwu.img<br>fastboot reboot<br></code></pre></td></tr></table></figure>
-
-<p>安装 magisk<br>完成~</p>
+<p>那么这个时候就该考虑，SHA1 算法的运算部分是由什么组成？SHA1 和 MD5 采用了相同的结构，每 512 比特分组需要一轮运算，我们的输入长度不超过一个分组的长度，所以只用考虑一轮运算。一轮运算是 80 步，每隔 20 步是一种模式。</p>
+<p>进行十数次甚至数十次的 inline hook，这种情况下我们使用 Unidbg 的 console debugger。<br>emulator.attach().addBreakPoint(module.base+0x3161E);</p>
 
               
             </div>
@@ -293,8 +293,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>pixel 3a（sargo）刷机</div>
-      <div>http://blog.uzilol.cn/2022/02/24/yuque/pixel%203a%EF%BC%88sargo%EF%BC%89%E5%88%B7%E6%9C%BA/</div>
+      <div>IDA经验</div>
+      <div>http://blog.uzilol.cn/2022/03/10/yuque/IDA%E7%BB%8F%E9%AA%8C/</div>
     </div>
     <div class="license-meta">
       
@@ -306,7 +306,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2022年2月24日</div>
+          <div>2022年3月10日</div>
         </div>
       
       
@@ -336,9 +336,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2022/02/24/yuque/%E5%BF%AB%E6%89%8BH5%E9%80%86%E5%90%91%EF%BC%8C%E5%AD%97%E4%BD%93%E5%8F%8D%E7%88%AC%EF%BC%8C%E4%BA%92%E5%8A%A8%E9%87%8F%E8%8E%B7%E5%8F%96/" title="快手H5逆向，字体反爬，互动量获取">
+                      <a href="/2022/03/14/yuque/Sekiro%20RPC%20%E6%9C%8D%E5%8A%A1%E6%94%B9%E9%80%A0/" title="Sekiro RPC 服务改造">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">快手H5逆向，字体反爬，互动量获取</span>
+                        <span class="hidden-mobile">Sekiro RPC 服务改造</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -346,8 +346,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2022/02/15/yuque/playwright%20python%E5%AE%9E%E8%B7%B5%E7%BB%8F%E9%AA%8C/" title="playwright python实践经验">
-                        <span class="hidden-mobile">playwright python实践经验</span>
+                      <a href="/2022/03/07/yuque/%E6%94%B9%E6%9C%BA%E5%AF%B9%E6%8A%97%E6%94%B6%E9%9B%86/" title="改机对抗收集">
+                        <span class="hidden-mobile">改机对抗收集</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

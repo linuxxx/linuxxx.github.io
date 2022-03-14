@@ -1,0 +1,811 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="ive_e （leoli）">
+  <meta name="keywords" content="frida unidbg 快手 抖音 淘宝 爬虫">
+  
+    <meta name="description" content="第一课绿洲搜索导出函数说明不是静态绑定去 jni_Onload 看看被混淆了。 上 unidgb用 findhash 找下算法 把 findhash.xml 和 findhash.py 扔到 ida plugins 目录下 ida -edit-plugin-findhash    第二课微博java 层三个参数so 层 5 个参数Java_com_sina_weibo_security_Weibo">
+<meta property="og:type" content="article">
+<meta property="og:title" content="unidgb学习笔记">
+<meta property="og:url" content="http://blog.uzilol.cn/2022/02/10/yuque/unidgb%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/index.html">
+<meta property="og:site_name" content="逆向的尾巴">
+<meta property="og:description" content="第一课绿洲搜索导出函数说明不是静态绑定去 jni_Onload 看看被混淆了。 上 unidgb用 findhash 找下算法 把 findhash.xml 和 findhash.py 扔到 ida plugins 目录下 ida -edit-plugin-findhash    第二课微博java 层三个参数so 层 5 个参数Java_com_sina_weibo_security_Weibo">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2022/png/2744235/1646368070883-968d933b-0249-4583-8fa3-02f8bfaacf23.png#clientId=u8c76a3ec-4065-4&from=paste&height=308&id=u690aef8d&margin=%5Bobject%20Object%5D&name=image.png&originHeight=615&originWidth=379&originalType=binary%E2%88%B6=1&size=8018&status=done&style=none&taskId=uf7f3cd14-f3f3-4aeb-b498-8a8aaa911be&width=189.5">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2022/png/2744235/1646368477063-d65734bb-541b-4f2b-804e-e149f747abf7.png#clientId=u8c76a3ec-4065-4&from=paste&height=384&id=udd2fccdc&margin=%5Bobject%20Object%5D&name=image.png&originHeight=767&originWidth=1237&originalType=binary%E2%88%B6=1&size=91007&status=done&style=none&taskId=u6ca4f2eb-9ec2-41d4-9b72-5eec9fee7a4&width=618.5">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2022/png/2744235/1646382421162-661e9372-523a-4f83-b1d7-b4ee5aba136d.png#clientId=u75aa53a9-3dde-4&from=paste&height=33&id=ub100e31a&margin=%5Bobject%20Object%5D&name=image.png&originHeight=65&originWidth=317&originalType=binary%E2%88%B6=1&size=1814&status=done&style=none&taskId=u40194255-304a-4480-a2ba-dfedce3b4ab&width=158.5">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2022/png/2744235/1646382573364-e7095f60-e558-4e66-8831-0ec8df00b997.png#clientId=u75aa53a9-3dde-4&from=paste&height=167&id=ub75dcd22&margin=%5Bobject%20Object%5D&name=image.png&originHeight=333&originWidth=1417&originalType=binary%E2%88%B6=1&size=80077&status=done&style=none&taskId=u85d2abfa-6cd7-4031-b2e3-9bb2b4485bd&width=708.5">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2022/png/2744235/1646385583320-7e0ebabf-8d90-4ecf-848e-968560b2b999.png#clientId=u75aa53a9-3dde-4&from=paste&height=34&id=u7a264a6e&margin=%5Bobject%20Object%5D&name=image.png&originHeight=67&originWidth=907&originalType=binary%E2%88%B6=1&size=16687&status=done&style=none&taskId=uc640b6c0-ec32-41a6-998c-c0dc14985ad&width=453.5">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2022/png/2744235/1646385474262-de466b22-e8db-42e9-8ea1-a3454d1d92a1.png#clientId=u75aa53a9-3dde-4&from=paste&height=20&id=ud60b64a8&margin=%5Bobject%20Object%5D&name=image.png&originHeight=39&originWidth=592&originalType=binary%E2%88%B6=1&size=7595&status=done&style=none&taskId=ub994529b-44a7-4ac3-9818-22d6db05e06&width=296">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2022/png/2744235/1646385917488-9d416676-be89-4cf6-b5f3-454cb1813fe2.png#clientId=u75aa53a9-3dde-4&from=paste&height=15&id=u628e0e75&margin=%5Bobject%20Object%5D&name=image.png&originHeight=29&originWidth=775&originalType=binary%E2%88%B6=1&size=5866&status=done&style=none&taskId=u1ada1490-84f0-460d-87bf-c83790e43aa&width=387.5">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2022/png/2744235/1646386207918-a48af625-32d1-41cb-845a-c7541b4ca0fe.png#clientId=u75aa53a9-3dde-4&from=paste&height=32&id=u02e1dc17&margin=%5Bobject%20Object%5D&name=image.png&originHeight=63&originWidth=882&originalType=binary%E2%88%B6=1&size=9093&status=done&style=none&taskId=ubca1e92d-583e-4626-99bb-8b02394a6db&width=441">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2022/png/2744235/1646404608662-698c4651-f192-4fc4-8b5d-2e5282bf029e.png#clientId=u15db014e-5b2a-4&from=paste&height=40&id=uc32ccb02&margin=%5Bobject%20Object%5D&name=image.png&originHeight=79&originWidth=1033&originalType=binary%E2%88%B6=1&size=11034&status=done&style=none&taskId=u1f464e41-b27c-406b-b035-99cf9f7c075&width=516.5">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2022/png/2744235/1646404719076-9ebf090d-6e41-4e62-bafa-a31957ee54cc.png#clientId=u15db014e-5b2a-4&from=paste&height=315&id=udaa0b4b5&margin=%5Bobject%20Object%5D&name=image.png&originHeight=629&originWidth=1220&originalType=binary%E2%88%B6=1&size=60168&status=done&style=none&taskId=u24553857-b9c4-4f58-800a-ec07a3d4d79&width=610">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2022/png/2744235/1646386752748-fe23f521-b5cd-4721-a203-6dc15063fd4d.png#clientId=u75aa53a9-3dde-4&from=paste&height=40&id=u8f470b48&margin=%5Bobject%20Object%5D&name=image.png&originHeight=79&originWidth=365&originalType=binary%E2%88%B6=1&size=3261&status=done&style=none&taskId=u5b5bb91b-8c0e-4cbc-b94e-b46e2be4ebd&width=182.5">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2022/png/2744235/1646404328887-6a7fea05-f863-4a8f-b84f-2a598c516c7a.png#clientId=u15db014e-5b2a-4&from=paste&height=22&id=u608ab82b&margin=%5Bobject%20Object%5D&name=image.png&originHeight=43&originWidth=758&originalType=binary%E2%88%B6=1&size=4552&status=done&style=none&taskId=ub9f30953-c922-461d-b880-f68fbab45aa&width=379">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2022/png/2744235/1646405854656-76acc26e-eea5-4007-b17a-c036e2356d35.png#clientId=u15db014e-5b2a-4&from=paste&height=31&id=u7ffcb81b&margin=%5Bobject%20Object%5D&name=image.png&originHeight=61&originWidth=553&originalType=binary%E2%88%B6=1&size=5013&status=done&style=none&taskId=u9c366d65-ce4b-4d4e-bc4a-605f95815f3&width=276.5">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2022/png/2744235/1646405863756-ae872cb6-a5dc-4619-98b2-a291511d8ad6.png#clientId=u15db014e-5b2a-4&from=paste&height=22&id=udf1c6635&margin=%5Bobject%20Object%5D&name=image.png&originHeight=44&originWidth=373&originalType=binary%E2%88%B6=1&size=1910&status=done&style=none&taskId=u9d48872f-e6df-43f2-b1f3-ba73bab68ba&width=186.5">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2022/png/2744235/1646405881963-62b62183-e6e5-4bcd-bcf4-cdea6d058d43.png#clientId=u15db014e-5b2a-4&from=paste&height=24&id=ud0847359&margin=%5Bobject%20Object%5D&name=image.png&originHeight=47&originWidth=173&originalType=binary%E2%88%B6=1&size=2193&status=done&style=none&taskId=ua852d95e-47a9-47ad-9a2f-7690ac10050&width=86.5">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2022/png/2744235/1646406527986-35e49466-b56e-4a20-8047-ac56a3f3a3fb.png#clientId=u15db014e-5b2a-4&from=paste&height=266&id=ub0454423&margin=%5Bobject%20Object%5D&name=image.png&originHeight=531&originWidth=456&originalType=binary%E2%88%B6=1&size=15489&status=done&style=none&taskId=u6bc5924f-fefb-425a-8c44-04ca2515716&width=228">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2022/png/2744235/1646649113386-dbb731f1-6d91-4af9-a321-01cbb5b8742d.png#clientId=u877b6e81-3612-4&from=paste&height=187&id=u5bb6e8ba&margin=%5Bobject%20Object%5D&name=image.png&originHeight=373&originWidth=1497&originalType=binary%E2%88%B6=1&size=145934&status=done&style=none&taskId=u4a37372d-bfb0-41b0-8010-7a8f8875495&width=748.5">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2022/png/2744235/1646650768117-364073c3-8503-4989-92b2-08d727d4d1f4.png#clientId=u877b6e81-3612-4&from=paste&height=154&id=uf39c3123&margin=%5Bobject%20Object%5D&name=image.png&originHeight=307&originWidth=1694&originalType=binary%E2%88%B6=1&size=123076&status=done&style=none&taskId=u26300d97-c60d-4396-a5d1-b68128af140&width=847">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2022/png/2744235/1646651175947-e04e3721-ba7f-4bba-b644-d6e58a826072.png#clientId=u877b6e81-3612-4&from=paste&height=29&id=u4ee15091&margin=%5Bobject%20Object%5D&name=image.png&originHeight=57&originWidth=629&originalType=binary%E2%88%B6=1&size=15632&status=done&style=none&taskId=u9995bf79-1a65-4764-9433-a917c7c44d4&width=314.5">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2022/png/2744235/1646651464843-7cfb97b4-f5ad-4805-a666-dd140e38c8ad.png#clientId=u877b6e81-3612-4&from=paste&height=67&id=uc1596f24&margin=%5Bobject%20Object%5D&name=image.png&originHeight=134&originWidth=1362&originalType=binary%E2%88%B6=1&size=45703&status=done&style=none&taskId=u03371502-f020-4036-a6be-7161cb493c4&width=681">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2022/png/2744235/1646652348816-fe3478a6-badb-48e7-9fae-57ca07d8fec6.png#clientId=u877b6e81-3612-4&from=paste&height=24&id=u0923938c&margin=%5Bobject%20Object%5D&name=image.png&originHeight=47&originWidth=534&originalType=binary%E2%88%B6=1&size=6098&status=done&style=none&taskId=u776df0f4-6bac-432d-af57-85622b9be95&width=267">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2022/png/2744235/1646652606761-9a9fac28-3076-455f-afa4-55cc6a906044.png#clientId=u877b6e81-3612-4&from=paste&height=54&id=u0afb9841&margin=%5Bobject%20Object%5D&name=image.png&originHeight=107&originWidth=238&originalType=binary%E2%88%B6=1&size=4160&status=done&style=none&taskId=uba3097b9-7295-40e6-aac4-757ea85869a&width=119">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2022/png/2744235/1646657375860-f8c0b959-3c55-4d94-8e38-58737c84c45a.png#clientId=u877b6e81-3612-4&from=paste&height=54&id=uee6cd7ff&margin=%5Bobject%20Object%5D&name=image.png&originHeight=107&originWidth=291&originalType=binary%E2%88%B6=1&size=5287&status=done&style=none&taskId=ua5b97116-38b0-4142-909d-a100e8c2a1f&width=145.5">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2022/png/2744235/1646657440586-698555a4-3cc3-4baa-9f14-f540f5714e85.png#clientId=u877b6e81-3612-4&from=paste&height=175&id=udf487c43&margin=%5Bobject%20Object%5D&name=image.png&originHeight=349&originWidth=713&originalType=binary%E2%88%B6=1&size=77624&status=done&style=none&taskId=u925ef396-d09f-4d95-b4b8-87d8b523ae7&width=356.5">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2022/png/2744235/1646895411986-3a17fa1c-323d-403a-901d-94d73cf36172.png#clientId=ua95ec78b-cfd4-4&from=paste&height=32&id=u2a3642d3&margin=%5Bobject%20Object%5D&name=image.png&originHeight=63&originWidth=1371&originalType=binary%E2%88%B6=1&size=12936&status=done&style=none&taskId=uca6da765-8c97-42ce-a3b2-c0040916222&width=685.5">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2022/png/2744235/1646895972748-ac45d1ec-aff9-4518-805e-8a88daddd59a.png#clientId=ua95ec78b-cfd4-4&from=paste&height=70&id=u31448231&margin=%5Bobject%20Object%5D&name=image.png&originHeight=140&originWidth=324&originalType=binary%E2%88%B6=1&size=7434&status=done&style=none&taskId=ubb86bfb4-39f9-4bd2-8b94-7c06228812d&width=162">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2022/png/2744235/1646985200248-07b5dfcc-be01-438e-a65d-16549cd2517b.png#clientId=u7e96ddff-24dc-4&from=paste&height=92&id=ub4afb330&margin=%5Bobject%20Object%5D&name=image.png&originHeight=183&originWidth=1109&originalType=binary%E2%88%B6=1&size=35052&status=done&style=none&taskId=ua7caffdc-f178-44c5-a756-a4002d5f68e&width=554.5">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2022/png/2744235/1646991530320-178d377e-2f32-43c6-aadd-506fbb5cf4d0.png#clientId=u7e96ddff-24dc-4&from=paste&height=399&id=u6828de8b&margin=%5Bobject%20Object%5D&name=image.png&originHeight=797&originWidth=750&originalType=binary%E2%88%B6=1&size=443621&status=done&style=none&taskId=u8a03ab47-90f6-4903-9e64-bc2bad47315&width=375">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2022/png/2744235/1646991990819-d76993f8-300c-4588-9840-6b61a963aa1b.png#clientId=u7e96ddff-24dc-4&from=paste&height=109&id=ue7a285b5&margin=%5Bobject%20Object%5D&name=image.png&originHeight=217&originWidth=851&originalType=binary%E2%88%B6=1&size=44335&status=done&style=none&taskId=u61d644ec-bed0-4659-8f47-84f7c2e53b0&width=425.5">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2022/png/2744235/1646992067733-403875ca-980c-4348-9435-fa2742b680c8.png#clientId=u7e96ddff-24dc-4&from=paste&height=280&id=u0be61860&margin=%5Bobject%20Object%5D&name=image.png&originHeight=560&originWidth=883&originalType=binary%E2%88%B6=1&size=29204&status=done&style=none&taskId=u1432dea9-4709-45b3-9fc6-060ea3c3774&width=441.5">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2022/png/2744235/1646999826876-e8b9cdbe-1d5c-46d1-87b2-b9adc0ba7d84.png#clientId=u7e96ddff-24dc-4&from=paste&height=138&id=u1342c35f&margin=%5Bobject%20Object%5D&name=image.png&originHeight=276&originWidth=1594&originalType=binary%E2%88%B6=1&size=91496&status=done&style=none&taskId=ue077988b-eb9a-4384-bf3f-5ac501237f8&width=797">
+<meta property="article:published_time" content="2022-02-10T08:55:22.000Z">
+<meta property="article:modified_time" content="2022-03-14T06:56:07.796Z">
+<meta property="article:author" content="ive_e （leoli）">
+<meta property="article:tag" content="frida unidbg 快手 抖音 淘宝 爬虫">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2022/png/2744235/1646368070883-968d933b-0249-4583-8fa3-02f8bfaacf23.png#clientId=u8c76a3ec-4065-4&from=paste&height=308&id=u690aef8d&margin=%5Bobject%20Object%5D&name=image.png&originHeight=615&originWidth=379&originalType=binary%E2%88%B6=1&size=8018&status=done&style=none&taskId=uf7f3cd14-f3f3-4aeb-b498-8a8aaa911be&width=189.5">
+  
+  
+  <title>unidgb学习笔记 - 逆向的尾巴</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"blog.uzilol.cn","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+
+  
+<meta name="generator" content="Hexo 6.0.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>逆向的尾巴</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          <span id="subtitle" title="unidgb学习笔记">
+            
+          </span>
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-02-10 16:55" pubdate>
+          2022年2月10日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          <!-- compatible with older versions-->
+          13k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          <!-- compatible with older versions-->
+          107 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+<meta name="referrer" content="no-referrer" />
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">unidgb学习笔记</h1>
+            
+            <div class="markdown-body">
+              
+              <h1 id="第一课绿洲"><a href="#第一课绿洲" class="headerlink" title="第一课绿洲"></a>第一课绿洲</h1><h2 id="搜索导出函数"><a href="#搜索导出函数" class="headerlink" title="搜索导出函数"></a>搜索导出函数</h2><p><img src="https://cdn.nlark.com/yuque/0/2022/png/2744235/1646368070883-968d933b-0249-4583-8fa3-02f8bfaacf23.png#clientId=u8c76a3ec-4065-4&from=paste&height=308&id=u690aef8d&margin=%5Bobject%20Object%5D&name=image.png&originHeight=615&originWidth=379&originalType=binary%E2%88%B6=1&size=8018&status=done&style=none&taskId=uf7f3cd14-f3f3-4aeb-b498-8a8aaa911be&width=189.5" srcset="/img/loading.gif" lazyload alt="image.png"><br>说明不是静态绑定<br>去 jni_Onload 看看<br><img src="https://cdn.nlark.com/yuque/0/2022/png/2744235/1646368477063-d65734bb-541b-4f2b-804e-e149f747abf7.png#clientId=u8c76a3ec-4065-4&from=paste&height=384&id=udd2fccdc&margin=%5Bobject%20Object%5D&name=image.png&originHeight=767&originWidth=1237&originalType=binary%E2%88%B6=1&size=91007&status=done&style=none&taskId=u6ca4f2eb-9ec2-41d4-9b72-5eec9fee7a4&width=618.5" srcset="/img/loading.gif" lazyload alt="image.png"><br>被混淆了。</p>
+<h1 id="上-unidgb"><a href="#上-unidgb" class="headerlink" title="上 unidgb"></a>上 unidgb</h1><h1 id="用-findhash-找下算法"><a href="#用-findhash-找下算法" class="headerlink" title="用 findhash 找下算法"></a>用 findhash 找下算法</h1><ul>
+<li>把 findhash.xml 和 findhash.py 扔到 ida plugins 目录下</li>
+<li>ida -edit-plugin-findhash</li>
+<li><img src="https://cdn.nlark.com/yuque/0/2022/png/2744235/1646382421162-661e9372-523a-4f83-b1d7-b4ee5aba136d.png#clientId=u75aa53a9-3dde-4&from=paste&height=33&id=ub100e31a&margin=%5Bobject%20Object%5D&name=image.png&originHeight=65&originWidth=317&originalType=binary%E2%88%B6=1&size=1814&status=done&style=none&taskId=u40194255-304a-4480-a2ba-dfedce3b4ab&width=158.5" srcset="/img/loading.gif" lazyload alt="image.png"></li>
+</ul>
+<p><img src="https://cdn.nlark.com/yuque/0/2022/png/2744235/1646382573364-e7095f60-e558-4e66-8831-0ec8df00b997.png#clientId=u75aa53a9-3dde-4&from=paste&height=167&id=ub75dcd22&margin=%5Bobject%20Object%5D&name=image.png&originHeight=333&originWidth=1417&originalType=binary%E2%88%B6=1&size=80077&status=done&style=none&taskId=u85d2abfa-6cd7-4031-b2e3-9bb2b4485bd&width=708.5" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<h1 id="第二课微博"><a href="#第二课微博" class="headerlink" title="第二课微博"></a>第二课微博</h1><h2 id="java-层三个参数"><a href="#java-层三个参数" class="headerlink" title="java 层三个参数"></a>java 层三个参数</h2><h1 id=""><a href="#" class="headerlink" title=""></a><img src="https://cdn.nlark.com/yuque/0/2022/png/2744235/1646385583320-7e0ebabf-8d90-4ecf-848e-968560b2b999.png#clientId=u75aa53a9-3dde-4&from=paste&height=34&id=u7a264a6e&margin=%5Bobject%20Object%5D&name=image.png&originHeight=67&originWidth=907&originalType=binary%E2%88%B6=1&size=16687&status=done&style=none&taskId=uc640b6c0-ec32-41a6-998c-c0dc14985ad&width=453.5" srcset="/img/loading.gif" lazyload alt="image.png"></h1><h2 id="so-层-5-个参数"><a href="#so-层-5-个参数" class="headerlink" title="so 层 5 个参数"></a>so 层 5 个参数</h2><p>Java_com_sina_weibo_security_WeiboSecurityUtils_calculateS<br><img src="https://cdn.nlark.com/yuque/0/2022/png/2744235/1646385474262-de466b22-e8db-42e9-8ea1-a3454d1d92a1.png#clientId=u75aa53a9-3dde-4&from=paste&height=20&id=ud60b64a8&margin=%5Bobject%20Object%5D&name=image.png&originHeight=39&originWidth=592&originalType=binary%E2%88%B6=1&size=7595&status=done&style=none&taskId=ub994529b-44a7-4ac3-9818-22d6db05e06&width=296" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<p>WeiboSecurityUtils_calculateS(int a1, int a2, int a3, int a4, int a5)<br>&#x2F;&#x2F; 第一个参数是 env<br>&#x2F;&#x2F; 第二个参数，实例方法是 jobject，静态方法是 jclazz，直接填 0，一般用不到。</p>
+<h2 id="识别-JNIEnv"><a href="#识别-JNIEnv" class="headerlink" title="识别 JNIEnv"></a>识别 JNIEnv</h2><p>**在第一个 int 参数上按 y，输入 JNIEnv* **， jni 的 api 就被识别出来了<br>按 N 在其他参数上重命名</p>
+<h2 id="查看静态绑定的地址-1："><a href="#查看静态绑定的地址-1：" class="headerlink" title="查看静态绑定的地址+1："></a>查看静态绑定的地址+1：</h2><p><img src="https://cdn.nlark.com/yuque/0/2022/png/2744235/1646385917488-9d416676-be89-4cf6-b5f3-454cb1813fe2.png#clientId=u75aa53a9-3dde-4&from=paste&height=15&id=u628e0e75&margin=%5Bobject%20Object%5D&name=image.png&originHeight=29&originWidth=775&originalType=binary%E2%88%B6=1&size=5866&status=done&style=none&taskId=u1ada1490-84f0-460d-87bf-c83790e43aa&width=387.5" srcset="/img/loading.gif" lazyload alt="image.png"><br>Thumb 指令需要+1，否则执行会报错。<br><img src="https://cdn.nlark.com/yuque/0/2022/png/2744235/1646386207918-a48af625-32d1-41cb-845a-c7541b4ca0fe.png#clientId=u75aa53a9-3dde-4&from=paste&height=32&id=u02e1dc17&margin=%5Bobject%20Object%5D&name=image.png&originHeight=63&originWidth=882&originalType=binary%E2%88%B6=1&size=9093&status=done&style=none&taskId=ubca1e92d-583e-4626-99bb-8b02394a6db&width=441" srcset="/img/loading.gif" lazyload alt="image.png"><br>0x1E7C + 1</p>
+<h1 id="context-如何构造"><a href="#context-如何构造" class="headerlink" title="context 如何构造"></a>context 如何构造</h1><p>DvmObject&lt;?&gt; context &#x3D; vm.resolveClass(“android&#x2F;content&#x2F;Context”).newObject(null);&#x2F;&#x2F; context</p>
+<h1 id="字符串类型如何构造"><a href="#字符串类型如何构造" class="headerlink" title="字符串类型如何构造"></a>字符串类型如何构造</h1><p>list.add(vm.addLocalObject(context));<br>list.add(vm.addLocalObject(new StringObject(vm, “12345”)));<br>list.add(vm.addLocalObject(new StringObject(vm, “r0ysue”)));</p>
+<p><strong>除了基本类型，比如 int，long 等，其他的对象类型一律要手动 addLocalObject</strong></p>
+<h1 id="运行报错"><a href="#运行报错" class="headerlink" title="运行报错"></a>运行报错</h1><p><img src="https://cdn.nlark.com/yuque/0/2022/png/2744235/1646404608662-698c4651-f192-4fc4-8b5d-2e5282bf029e.png#clientId=u15db014e-5b2a-4&from=paste&height=40&id=uc32ccb02&margin=%5Bobject%20Object%5D&name=image.png&originHeight=79&originWidth=1033&originalType=binary%E2%88%B6=1&size=11034&status=done&style=none&taskId=u1f464e41-b27c-406b-b035-99cf9f7c075&width=516.5" srcset="/img/loading.gif" lazyload alt="image.png"><br>运行下。0x2c8d 按 G 定位查看<br><img src="https://cdn.nlark.com/yuque/0/2022/png/2744235/1646404719076-9ebf090d-6e41-4e62-bafa-a31957ee54cc.png#clientId=u15db014e-5b2a-4&from=paste&height=315&id=udaa0b4b5&margin=%5Bobject%20Object%5D&name=image.png&originHeight=629&originWidth=1220&originalType=binary%E2%88%B6=1&size=60168&status=done&style=none&taskId=u24553857-b9c4-4f58-800a-ec07a3d4d79&width=610" srcset="/img/loading.gif" lazyload alt="image.png"><br>按 x 查看交叉应用定位到 sub_1C60</p>
+<h1 id="unidgb-打-patch-绕过签名校验"><a href="#unidgb-打-patch-绕过签名校验" class="headerlink" title="unidgb 打 patch 绕过签名校验"></a>unidgb 打 patch 绕过签名校验</h1><p><img src="https://cdn.nlark.com/yuque/0/2022/png/2744235/1646386752748-fe23f521-b5cd-4721-a203-6dc15063fd4d.png#clientId=u75aa53a9-3dde-4&from=paste&height=40&id=u8f470b48&margin=%5Bobject%20Object%5D&name=image.png&originHeight=79&originWidth=365&originalType=binary%E2%88%B6=1&size=3261&status=done&style=none&taskId=u5b5bb91b-8c0e-4cbc-b94e-b46e2be4ebd&width=182.5" srcset="/img/loading.gif" lazyload alt="image.png"><br>这个判断疑似在校验签名<br>根据 ARM 调用约定，入参前四个分别通过 R0-R3 调用，返回值通过 R0 返回<br>mov r0,1 <a target="_blank" rel="noopener" href="https://armconverter.com/">https://armconverter.com/</a>一下 4FF00100<br>ida textview 查看偏移地址：<img src="https://cdn.nlark.com/yuque/0/2022/png/2744235/1646404328887-6a7fea05-f863-4a8f-b84f-2a598c516c7a.png#clientId=u15db014e-5b2a-4&from=paste&height=22&id=u608ab82b&margin=%5Bobject%20Object%5D&name=image.png&originHeight=43&originWidth=758&originalType=binary%E2%88%B6=1&size=4552&status=done&style=none&taskId=ub9f30953-c922-461d-b880-f68fbab45aa&width=379" srcset="/img/loading.gif" lazyload alt="image.png"><br>module.base + 0x1E86</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs html">int patchCode = 0x4FF00100; // emulator.getMemory().pointer(module.base +<br>0x1E86).setInt(0,patchCode);<br></code></pre></td></tr></table></figure>
+
+<p><strong>需要注意的是，这儿地址可别+1 了，Thumb 的+1 只在运行和 Hook 时需要考虑，打 Patch 可别想。</strong></p>
+<h1 id="借助-unidgb-分析算法"><a href="#借助-unidgb-分析算法" class="headerlink" title="借助 unidgb 分析算法"></a>借助 unidgb 分析算法</h1><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs html">//初始化2个字符串。key和bytes inputBytesKey = (*a1)-&gt;GetStringUTFChars(a1,<br>inputKey, 0); inputBytesStr = (char *)(*a1)-&gt;GetStringUTFChars(a1, inputBytes,<br>0); v7 = j_strlen(inputBytesStr); v8 = v7 + j_strlen(inputBytesKey) + 1;<br>inputBytesStr2 = j_malloc(v8); j_memset(inputBytesStr2, 0, v8); j_strcpy((char<br>*)inputBytesStr2, inputBytesStr); j_strcat((char *)inputBytesStr2,<br>inputBytesKey); //C 库函数 - strcat() 拼接key和bytestr result = (_BYTE<br>*)MDStringOld(inputBytesStr2); //传入MD方法做运算 v11 = (char *)j_malloc(9u);<br>//创建字符串v11 *v11 = result[1]; v11[1] = result[5]; v11[2] = result[2]; v11[3]<br>= result[10]; v11[4] = result[17]; v11[5] = result[9]; v11[6] = result[25]; v12<br>= result[27]; v11[8] = 0; v11[7] = v12; //将结果的1,5,2，10,17,9,25,27位取出来<br>//下面创建NewByteArray把V11传进去 v21 = (*a1)-&gt;FindClass(a1,<br>&quot;java/lang/String&quot;); v22 = (*a1)-&gt;GetMethodID(a1, v21, &quot;<span class="hljs-tag">&lt;<span class="hljs-name">init</span></span><br><span class="hljs-tag">  &gt;</span>&quot;, &quot;([BLjava/lang/String;)V&quot;); v13 = j_strlen(v11); v19 =<br>  (*a1)-&gt;NewByteArray(a1, v13); v14 = j_strlen(v11);<br>  (*a1)-&gt;SetByteArrayRegion(a1, v19, 0, v14, v11);<br>  //将bytearray转string，utf-8编码 v15 = (*a1)-&gt;NewStringUTF(a1, &quot;utf-8&quot;); v16 =<br>  (*a1)-&gt;NewObject(a1, v21, v22, v19, v15); j_free(v11); j_free(inputBytesStr2);<br>  (*a1)-&gt;ReleaseStringUTFChars(a1, (jstring)inputBytes, inputBytesStr); return<br>  (*a1)-&gt;PopLocalFrame(a1, v16);&lt;/init<br>&gt;<br></code></pre></td></tr></table></figure>
+
+<p>F5 跟踪算法的具体方法<br><img src="https://cdn.nlark.com/yuque/0/2022/png/2744235/1646405854656-76acc26e-eea5-4007-b17a-c036e2356d35.png#clientId=u15db014e-5b2a-4&from=paste&height=31&id=u7ffcb81b&margin=%5Bobject%20Object%5D&name=image.png&originHeight=61&originWidth=553&originalType=binary%E2%88%B6=1&size=5013&status=done&style=none&taskId=u9c366d65-ce4b-4d4e-bc4a-605f95815f3&width=276.5" srcset="/img/loading.gif" lazyload alt="image.png"><br>右键<img src="https://cdn.nlark.com/yuque/0/2022/png/2744235/1646405863756-ae872cb6-a5dc-4619-98b2-a291511d8ad6.png#clientId=u15db014e-5b2a-4&from=paste&height=22&id=udf1c6635&margin=%5Bobject%20Object%5D&name=image.png&originHeight=44&originWidth=373&originalType=binary%E2%88%B6=1&size=1910&status=done&style=none&taskId=u9d48872f-e6df-43f2-b1f3-ba73bab68ba&width=186.5" srcset="/img/loading.gif" lazyload alt="image.png"><br>查看<img src="https://cdn.nlark.com/yuque/0/2022/png/2744235/1646405881963-62b62183-e6e5-4bcd-bcf4-cdea6d058d43.png#clientId=u15db014e-5b2a-4&from=paste&height=24&id=ud0847359&margin=%5Bobject%20Object%5D&name=image.png&originHeight=47&originWidth=173&originalType=binary%E2%88%B6=1&size=2193&status=done&style=none&taskId=ua852d95e-47a9-47ad-9a2f-7690ac10050&width=86.5" srcset="/img/loading.gif" lazyload alt="image.png"> text view<br>得到偏移地址 0x1BD0+1<br>也可以按 TAB 键直接跳转</p>
+<h2 id="frida-hook-代码："><a href="#frida-hook-代码：" class="headerlink" title="frida hook 代码："></a>frida hook 代码：</h2><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs html">var baseAddr = Module.findBaseAddress(&quot;libutility.so&quot;) var MDStringOld =<br>baseAddr.add(0x1BD0).add(0x1) Interceptor.attach(MDStringOld, &#123; onEnter:<br>function (args) &#123; console.log(&quot;input:\n&quot;, hexdump(this.arg0)) &#125;, onLeave:<br>function (retval) &#123; console.log(&quot;result:\n&quot;, hexdump(retval)) &#125; &#125;)<br></code></pre></td></tr></table></figure>
+
+<h2 id="使用-unidgb-hook"><a href="#使用-unidgb-hook" class="headerlink" title="使用 unidgb hook"></a>使用 unidgb hook</h2><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs html">IHookZz hookZz = HookZz.getInstance(emulator); hookZz.wrap(module.base + 0x1BD0<br>+ 1, new WrapCallback<span class="hljs-tag">&lt;<span class="hljs-name">HookZzArm32RegisterContext</span></span><br><span class="hljs-tag">  &gt;</span>() &#123; // inline wrap导出函数 @Override // 类似于 frida onEnter public void<br>  preCall(Emulator&lt;?&gt;<br>  emulator, HookZzArm32RegisterContext ctx, HookEntryInfo info) &#123; // 类似于Frida<br>  args[0] Pointer input = ctx.getPointerArg(0); System.out.println(&quot;input:&quot; +<br>  input.getString(0)); &#125;; @Override // 类似于 frida onLeave public void<br>  postCall(Emulator&lt;?&gt;<br>  emulator, HookZzArm32RegisterContext ctx, HookEntryInfo info) &#123; Pointer result<br>  = ctx.getPointerArg(0); System.out.println(&quot;result:&quot; + result.getString(0)); &#125;<br>  &#125;);&lt;/HookZzArm32RegisterContext<br>&gt;<br></code></pre></td></tr></table></figure>
+
+<h2 id="打印参数和返回值"><a href="#打印参数和返回值" class="headerlink" title="打印参数和返回值"></a>打印参数和返回值</h2><p>input:12345r0ysue<br>result:439a333788b0cecfce1389d4b83ba1cb</p>
+<p>结果是 32 位，猜测 md5，测试下。<a target="_blank" rel="noopener" href="https://gchq.github.io/CyberChef/">https://gchq.github.io/CyberChef/</a><br><img src="https://cdn.nlark.com/yuque/0/2022/png/2744235/1646406527986-35e49466-b56e-4a20-8047-ac56a3f3a3fb.png#clientId=u15db014e-5b2a-4&from=paste&height=266&id=ub0454423&margin=%5Bobject%20Object%5D&name=image.png&originHeight=531&originWidth=456&originalType=binary%E2%88%B6=1&size=15489&status=done&style=none&taskId=u6bc5924f-fefb-425a-8c44-04ca2515716&width=228" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<p>最终结果：<br>339be88b</p>
+<h1 id="总结："><a href="#总结：" class="headerlink" title="总结："></a>总结：</h1><h3 id="java-层的方法到了-so-层后，前面会多两个参数，一个是-JNIEnv-，一个是无关紧要的参数"><a href="#java-层的方法到了-so-层后，前面会多两个参数，一个是-JNIEnv-，一个是无关紧要的参数" class="headerlink" title="java 层的方法到了 so 层后，前面会多两个参数，一个是 JNIEnv ，一个是无关紧要的参数"></a>java 层的方法到了 so 层后，前面会多两个参数，一个是 JNIEnv ，一个是无关紧要的参数</h3><h3 id="识别-JNIEnv-1"><a href="#识别-JNIEnv-1" class="headerlink" title="识别 JNIEnv"></a>识别 JNIEnv</h3><pre><code class="hljs">在第一个int 参数上按y，输入JNIEnv* ， jni的api就被识别出来了
+</code></pre>
+<h3 id="重命名参数"><a href="#重命名参数" class="headerlink" title="重命名参数"></a>重命名参数</h3><pre><code class="hljs">在参数上按n
+</code></pre>
+<h3 id="Thumb-指令需要-1"><a href="#Thumb-指令需要-1" class="headerlink" title="Thumb 指令需要+1"></a>Thumb 指令需要+1</h3><h3 id="unidgb-如何打-patch"><a href="#unidgb-如何打-patch" class="headerlink" title="unidgb 如何打 patch"></a>unidgb 如何打 patch</h3><h3 id="unidgb-如何使用-hookzz-hook-打印参数和返回值"><a href="#unidgb-如何使用-hookzz-hook-打印参数和返回值" class="headerlink" title="unidgb 如何使用 hookzz hook 打印参数和返回值"></a>unidgb 如何使用 hookzz hook 打印参数和返回值</h3><p>完</p>
+<h1 id="第三课最右-V2-Sign"><a href="#第三课最右-V2-Sign" class="headerlink" title="第三课最右 V2-Sign"></a>第三课最右 V2-Sign</h1><p><img src="https://cdn.nlark.com/yuque/0/2022/png/2744235/1646649113386-dbb731f1-6d91-4af9-a321-01cbb5b8742d.png#clientId=u877b6e81-3612-4&from=paste&height=187&id=u5bb6e8ba&margin=%5Bobject%20Object%5D&name=image.png&originHeight=373&originWidth=1497&originalType=binary%E2%88%B6=1&size=145934&status=done&style=none&taskId=u4a37372d-bfb0-41b0-8010-7a8f8875495&width=748.5" srcset="/img/loading.gif" lazyload alt="image.png"><br>可以看到用了动态注册<br>静态注册不走 RegisterNative 的<br>把要调用的两个函数的地址记录下来<br>0x4a069</p>
+<p>RegisterNative(com&#x2F;izuiyou&#x2F;network&#x2F;NetCrypto, native_init()V, RX@0x4004a069[libnet_crypto.so]0x4a069)</p>
+<p>0x4a28d</p>
+<p>RegisterNative(com&#x2F;izuiyou&#x2F;network&#x2F;NetCrypto, sign(Ljava&#x2F;lang&#x2F;String;[B)Ljava&#x2F;lang&#x2F;String;, RX@0x4004a28d[libnet_crypto.so]0x4a28d)</p>
+<p>如果加载 so 第二个参数设置为 false，则会出现乱码<br>说明 SO 做了字符串混淆，这个解密一般发生在 Init array 节或者 JNI OnLoad 中<br>Shift+F7 查看 segments</p>
+<p>这个问题后续再分析。。继续运行</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2022/png/2744235/1646650768117-364073c3-8503-4989-92b2-08d727d4d1f4.png#clientId=u877b6e81-3612-4&from=paste&height=154&id=uf39c3123&margin=%5Bobject%20Object%5D&name=image.png&originHeight=307&originWidth=1694&originalType=binary%E2%88%B6=1&size=123076&status=done&style=none&taskId=u26300d97-c60d-4396-a5d1-b68128af140&width=847" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<p>这个是由于一些常见的、系统的 Java 类和方法，Unidbg 作开发者已经做了处理，但不常使用的类库以及自定义 Java 类显然不在此列，我们需要补环境。</p>
+<ul>
+<li>用户类里面补，因为我们的 zuiyou 类继承了 AbstractJNI</li>
+<li>AbstractJNI 里面补</li>
+</ul>
+<p>我们选择在用户类里面补，缺什么补什么。这里却的是 com&#x2F;izuiyou&#x2F;common&#x2F;base&#x2F;BaseApplication-&gt;getAppContext()Landroid&#x2F;content&#x2F;Context;<br>我们 new 一个 android&#x2F;content&#x2F;Context</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs html">return vm.resolveClass(&quot;android/content/Context&quot;).newObject(null);<br></code></pre></td></tr></table></figure>
+
+<p>接下来处理 sign 方法:<br><img src="https://cdn.nlark.com/yuque/0/2022/png/2744235/1646651175947-e04e3721-ba7f-4bba-b644-d6e58a826072.png#clientId=u877b6e81-3612-4&from=paste&height=29&id=u4ee15091&margin=%5Bobject%20Object%5D&name=image.png&originHeight=57&originWidth=629&originalType=binary%E2%88%B6=1&size=15632&status=done&style=none&taskId=u9995bf79-1a65-4764-9433-a917c7c44d4&width=314.5" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs html">private String callSign()&#123; // 准备入参 List<span class="hljs-tag">&lt;<span class="hljs-name">object</span>&gt;</span><br>  list = new ArrayList<span class="hljs-tag">&lt;&gt;</span>(10); list.add(vm.getJNIEnv()); // 第一个参数是env<br>  list.add(0); //<br>  第二个参数，实例方法是jobject，静态方法是jclass，直接填0，一般用不到。<br>  list.add(vm.addLocalObject(new StringObject(vm, &quot;12345&quot;))); ByteArray<br>  plainText = new ByteArray(vm, &quot;r0ysue&quot;.getBytes(StandardCharsets.UTF_8));<br>  list.add(vm.addLocalObject(plainText)); Number number =<br>  module.callFunction(emulator, 0x4a28D, list.toArray()); return<br>  vm.getObject(number.intValue()).getValue().toString(); &#125;;<br><span class="hljs-tag">&lt;/<span class="hljs-name">object</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<p>前 2 个参数不用管， 最后一个 bytearray 构造方式就是 new 一个 byteArray<br><img src="https://cdn.nlark.com/yuque/0/2022/png/2744235/1646651464843-7cfb97b4-f5ad-4805-a666-dd140e38c8ad.png#clientId=u877b6e81-3612-4&from=paste&height=67&id=uc1596f24&margin=%5Bobject%20Object%5D&name=image.png&originHeight=134&originWidth=1362&originalType=binary%E2%88%B6=1&size=45703&status=done&style=none&taskId=u03371502-f020-4036-a6be-7161cb493c4&width=681" srcset="/img/loading.gif" lazyload alt="image.png"><br>继续补环境，依葫芦画瓢，把缺少的环境都给补了。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><code class="hljs html">@Override public DvmObject&lt;?&gt;<br>callObjectMethodV(BaseVM vm, DvmObject&lt;?&gt;<br>dvmObject, String signature, VaList vaList) &#123; switch (signature) &#123; case<br>&quot;android/content/Context-&gt;getClass()Ljava/lang/Class;&quot;: return<br>dvmObject.getObjectType(); case<br>&quot;java/lang/Class-&gt;getSimpleName()Ljava/lang/String;&quot;: return new<br>StringObject(vm, &quot;AppController&quot;); case<br>&quot;java/lang/String-&gt;getAbsolutePath()Ljava/lang/String;&quot;: case<br>&quot;android/content/Context-&gt;getFilesDir()Ljava/io/File;&quot;: return new<br>StringObject(vm, &quot;/data/user/0/cn.xiaochuankeji.tieba/files&quot;); &#125; return<br>super.callObjectMethodV(vm, dvmObject, signature, vaList); &#125; @Override public<br>boolean callStaticBooleanMethodV(BaseVM vm, DvmClass dvmClass, String signature,<br>VaList vaList) &#123; switch (signature) &#123; case<br>&quot;android/os/Debug-&gt;isDebuggerConnected()Z&quot;: return false; &#125; return<br>super.callStaticBooleanMethodV(vm, dvmClass, signature, vaList); &#125; @Override<br>public int callStaticIntMethodV(BaseVM vm, DvmClass dvmClass, String signature,<br>VaList vaList) &#123; switch (signature) &#123; case &quot;android/os/Process-&gt;myPid()I&quot;:<br>return 0; &#125; return super.callStaticIntMethodV(vm, dvmClass, signature, vaList);<br>&#125; private String callSign() &#123; // 准备入参 List<span class="hljs-tag">&lt;<span class="hljs-name">object</span>&gt;</span><br>  list = new ArrayList<span class="hljs-tag">&lt;&gt;</span>(10); list.add(vm.getJNIEnv()); // 第一个参数是env<br>  list.add(0); //<br>  第二个参数，实例方法是jobject，静态方法是jclass，直接填0，一般用不到。<br>  list.add(vm.addLocalObject(new StringObject(vm, &quot;12345&quot;))); ByteArray<br>  plainText = new ByteArray(vm, &quot;r0ysue&quot;.getBytes(StandardCharsets.UTF_8));<br>  list.add(vm.addLocalObject(plainText)); Number number =<br>  module.callFunction(emulator, 0x4a28D, list.toArray()); return<br>  vm.getObject(number.intValue()).getValue().toString(); &#125;<br><span class="hljs-tag">&lt;/<span class="hljs-name">object</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.nlark.com/yuque/0/2022/png/2744235/1646652348816-fe3478a6-badb-48e7-9fae-57ca07d8fec6.png#clientId=u877b6e81-3612-4&from=paste&height=24&id=u0923938c&margin=%5Bobject%20Object%5D&name=image.png&originHeight=47&originWidth=534&originalType=binary%E2%88%B6=1&size=6098&status=done&style=none&taskId=u776df0f4-6bac-432d-af57-85622b9be95&width=267" srcset="/img/loading.gif" lazyload alt="image.png"><br>搞定~</p>
+<h2 id="算法还原"><a href="#算法还原" class="headerlink" title="算法还原"></a>算法还原</h2><p>因为返回值总是 32 位长度，且明文不变时输出也不变，很容易让人想到哈希算法，尤其是 MD5 算法。但是，样本经过了一定程度的 OLLVM 混淆，很难自上而下或者自下而上逐个模块分析代码逻辑，所以我们需要借助一下工具，当当当， FIndHash 试一下。<br>按 G 跳转到 65540</p>
+<p>unidgb hook 65540 打印入参<br>不确定三个参数是指针还是数值，所以先全部做为数值处理，作为 long 类型看待，防止整数溢出。<br><img src="https://cdn.nlark.com/yuque/0/2022/png/2744235/1646652606761-9a9fac28-3076-455f-afa4-55cc6a906044.png#clientId=u877b6e81-3612-4&from=paste&height=54&id=u0afb9841&margin=%5Bobject%20Object%5D&name=image.png&originHeight=107&originWidth=238&originalType=binary%E2%88%B6=1&size=4160&status=done&style=none&taskId=uba3097b9-7295-40e6-aac4-757ea85869a&width=119" srcset="/img/loading.gif" lazyload alt="image.png"><br>参数 1 和 3 像是地址，参数 2 像是长度<br>打印内存：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs html">Inspector.inspect(ctx.getR0Pointer().getByteArray(0, 0x10), &quot;Arg1&quot;);<br>System.out.println(ctx.getR1Long());<br>Inspector.inspect(ctx.getR2Pointer().getByteArray(0, 0x10), &quot;Arg3&quot;); &#125;;<br>@Override // 类似于 frida onLeave public void postCall(Emulator&lt;?&gt;<br>emulator, HookZzArm32RegisterContext ctx, HookEntryInfo info) &#123; &#125; &#125;); &#125;<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs html">&gt;-----------------------------------------------------------------------------&lt;<br>[20:45:00 882]Arg1, md5=433fc65838eefef90efcd0dbebe279c0,<br>hex=723079737565004000f03f4018f7ffbf size: 16 0000: 72 30 79 73 75 65 00 40 00<br>F0 3F 40 18 F7 FF BF r0ysue.@..?@....<br>^-----------------------------------------------------------------------------^<br>6<br>&gt;-----------------------------------------------------------------------------&lt;<br>[20:45:00 886]Arg3, md5=8ea9479bc177e0a5b093801cefd5f32e,<br>hex=ecf6ffbf000000005bbf252988f6ffbf size: 16 0000: EC F6 FF BF 00 00 00 00 5B<br>BF 25 29 88 F6 FF BF ........[.%)....<br></code></pre></td></tr></table></figure>
+
+<p>参数 1.就是字符串<br>参数 2 是长度刚好是 6<br>参数 3 一般都是存放结果的 buffer，c 开发者习惯，记住就好</p>
+<p>打印结果：<br>preCall 存入，postCall 取出</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs html">// push ctx.push(ctx.getR2Pointer());<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs html">// pop 取出 Pointer output = ctx.pop(); Inspector.inspect(output.getByteArray(0,<br>0x10), &quot;Arg3 after function&quot;);<br></code></pre></td></tr></table></figure>
+
+<p>接下来分析算法：<br><img src="https://cdn.nlark.com/yuque/0/2022/png/2744235/1646657375860-f8c0b959-3c55-4d94-8e38-58737c84c45a.png#clientId=u877b6e81-3612-4&from=paste&height=54&id=uee6cd7ff&margin=%5Bobject%20Object%5D&name=image.png&originHeight=107&originWidth=291&originalType=binary%E2%88%B6=1&size=5287&status=done&style=none&taskId=ua5b97116-38b0-4142-909d-a100e8c2a1f&width=145.5" srcset="/img/loading.gif" lazyload alt="image.png"><br><strong>按 H 键将这 4 个数转为 16 进制</strong><br><strong>说它疑似 MD5 主要有两个依据</strong></p>
+<ul>
+<li>输出结果是 32 位，MD5 恰好也是 32 位长度。</li>
+<li>有四个 IV，MD5 就有四个 IV</li>
+</ul>
+<p>但是他不是标准的 md5<br><img src="https://cdn.nlark.com/yuque/0/2022/png/2744235/1646657440586-698555a4-3cc3-4baa-9f14-f540f5714e85.png#clientId=u877b6e81-3612-4&from=paste&height=175&id=udf487c43&margin=%5Bobject%20Object%5D&name=image.png&originHeight=349&originWidth=713&originalType=binary%E2%88%B6=1&size=77624&status=done&style=none&taskId=u925ef396-d09f-4d95-b4b8-87d8b523ae7&width=356.5" srcset="/img/loading.gif" lazyload alt="image.png"><br>标准的 4 个常量值与他不同<br>哈希算法的魔改，最简单的修改点就是修改 IV，此处似乎采用了这种。我们测试下结果发现果然如此~结束</p>
+<h1 id="第四课"><a href="#第四课" class="headerlink" title="第四课"></a>第四课</h1><p>搭建基本架子跑起来~</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs html">RegisterNative(com/mfw/tnative/AuthorizeHelper,<br>xPreAuthencode(Landroid/content/Context;Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;,<br>RX@0x4002e301[libmfw.so]0x2e301)<br></code></pre></td></tr></table></figure>
+
+<p>得到地址：0x2e301<br>算法还原<br>测试发现，不论输入明文多长，都输出固定长度结果，所以疑似哈希算法，又因为输出恒为 40 位，所以又疑似哈希算法中的 SHA1 算法。<br>按 G 跳转到地址查看<br><img src="https://cdn.nlark.com/yuque/0/2022/png/2744235/1646895411986-3a17fa1c-323d-403a-901d-94d73cf36172.png#clientId=ua95ec78b-cfd4-4&from=paste&height=32&id=u2a3642d3&margin=%5Bobject%20Object%5D&name=image.png&originHeight=63&originWidth=1371&originalType=binary%E2%88%B6=1&size=12936&status=done&style=none&taskId=uca6da765-8c97-42ce-a3b2-c0040916222&width=685.5" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<p>但我们在用 Unidbg 模拟执行时，并没有感受到 native 调用 JAVA 签名校验的烦恼，这是因为我们传入了 APK，Unidbg 替我们处理了这部分签名校验，但 Unidbg 并不能处理所有情况下的签名校验，所以在之前的一些例子里，我们会 patch 掉签名校验函数。</p>
+<p>开始 hook</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs html">public void hook_312E0()&#123; // 获取HookZz对象 IHookZz hookZz =<br>HookZz.getInstance(emulator); // 加载HookZz，支持inline<br>hook，文档看https://github.com/jmpews/HookZz // enable hook<br>hookZz.enable_arm_arm64_b_branch(); // 测试enable_arm_arm64_b_branch，可有可无<br>// hook MDStringOld hookZz.wrap(module.base + 0x312E0 + 1, new<br>WrapCallback<span class="hljs-tag">&lt;<span class="hljs-name">HookZzArm32RegisterContext</span></span><br><span class="hljs-tag">  &gt;</span>() &#123; // inline wrap导出函数 @Override // 方法执行前 public void<br>  preCall(Emulator&lt;?&gt;<br>  emulator, HookZzArm32RegisterContext ctx, HookEntryInfo info) &#123; Pointer input<br>  = ctx.getPointerArg(0); byte[] inputhex = input.getByteArray(0,<br>  ctx.getR2Int()); Inspector.inspect(inputhex, &quot;input&quot;); Pointer out =<br>  ctx.getPointerArg(1); ctx.push(out); &#125;; @Override // 方法执行后 public void<br>  postCall(Emulator&lt;?&gt;<br>  emulator, HookZzArm32RegisterContext ctx, HookEntryInfo info) &#123; Pointer output<br>  = ctx.pop(); byte[] outputhex = output.getByteArray(0, 20);<br>  Inspector.inspect(outputhex, &quot;output&quot;); &#125; &#125;);<br>  hookZz.disable_arm_arm64_b_branch(); &#125;;&lt;/HookZzArm32RegisterContext<br>&gt;<br></code></pre></td></tr></table></figure>
+
+<p>返回值就是我们的结果，那就是自定义函数 1 加密函数了。<br>进入 sub_312E0<br><img src="https://cdn.nlark.com/yuque/0/2022/png/2744235/1646895972748-ac45d1ec-aff9-4518-805e-8a88daddd59a.png#clientId=ua95ec78b-cfd4-4&from=paste&height=70&id=u31448231&margin=%5Bobject%20Object%5D&name=image.png&originHeight=140&originWidth=324&originalType=binary%E2%88%B6=1&size=7434&status=done&style=none&taskId=ubb86bfb4-39f9-4bd2-8b94-7c06228812d&width=162" srcset="/img/loading.gif" lazyload alt="image.png"><br>发现 5 个常量，按 H 转为 16 进制</p>
+<h1 id="第五课"><a href="#第五课" class="headerlink" title="第五课"></a>第五课</h1><p>nonce&#x3D;68D04064-17A1-4705-8F47-534740723D9A&amp;timestamp&#x3D;1646985629263&amp;devicetoken&#x3D;F1517503-9779-32B7-9C78-F5EF501102BC&amp;sign&#x3D;C08F72C468C86B764EFF3B782B766DA8</p>
+<p>nonce&#x3D;68D04064-17A1-4705-8F47-534740723D9A&amp;timestamp&#x3D;1647001027020&amp;devicetoken&#x3D;F1517503-9779-32B7-9C78-F5EF501102BC&amp;sign&#x3D;E9C515DC7FAF190C20AB4E7E3C9869E1</p>
+<p>无法 f5，使用 findHash 试试无结果<br>打开 unidgb 的 traceCode 功能<br>emulator.traceCode(module.base, module.base + module.size);<br>参数是起始地址和终止地址<br>trace 的汇编执行流到文件中，方便查看</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs html">emulator.traceCode(module.base, module.base + module.size);<br></code></pre></td></tr></table></figure>
+
+<p>结果有 11w 行。。<br><img src="https://cdn.nlark.com/yuque/0/2022/png/2744235/1646985200248-07b5dfcc-be01-438e-a65d-16549cd2517b.png#clientId=u7e96ddff-24dc-4&from=paste&height=92&id=ub4afb330&margin=%5Bobject%20Object%5D&name=image.png&originHeight=183&originWidth=1109&originalType=binary%E2%88%B6=1&size=35052&status=done&style=none&taskId=ua7caffdc-f178-44c5-a756-a4002d5f68e&width=554.5" srcset="/img/loading.gif" lazyload alt="image.png"><br>MD5 在前面的篇幅中已经讲了很多了，它有两组标志性的数可以用于确认自身身份。</p>
+<p>1.是 0x67452301 0xefcdab89 等四个魔术，但单靠这四个数证明不了是 MD5，也可能是别的哈希算法，除此之外，算法可能魔改常数。</p>
+<p>2.MD5 的 64 个 K，K1-K64 是 MD5 独特的标志，简单的魔改也不会改 K 值。（其实 K 表也可以随便改，但一般的开发人员也不懂 K 的意义，不敢乱改。）</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs html"># 魔数 A = 0x67452301 B = 0xefcdab89 C = 0x98badcfe D = 0x10325476 # K表 Ktable<br>= [0xd76aa478, 0xe8c7b756, 0x242070db, 0xc1bdceee, 0xf57c0faf, 0x4787c62a,<br>0xa8304613, 0xfd469501, 0x698098d8, 0x8b44f7af, 0xffff5bb1, 0x895cd7be,<br>0x6b901122, 0xfd987193, 0xa679438e, 0x49b40821, 0xf61e2562, 0xc040b340,<br>0x265e5a51, 0xe9b6c7aa, 0xd62f105d, 0x2441453, 0xd8a1e681, 0xe7d3fbc8,<br>0x21e1cde6, 0xc33707d6, 0xf4d50d87, 0x455a14ed, 0xa9e3e905, 0xfcefa3f8,<br>0x676f02d9, 0x8d2a4c8a, 0xfffa3942, 0x8771f681, 0x6d9d6122, 0xfde5380c,<br>0xa4beea44, 0x4bdecfa9, 0xf6bb4b60, 0xbebfbc70, 0x289b7ec6, 0xeaa127fa,<br>0xd4ef3085, 0x4881d05, 0xd9d4d039, 0xe6db99e5, 0x1fa27cf8, 0xc4ac5665,<br>0xf4292244, 0x432aff97, 0xab9423a7, 0xfc93a039, 0x655b59c3, 0x8f0ccc92,<br>0xffeff47d, 0x85845dd1, 0x6fa87e4f, 0xfe2ce6e0, 0xa3014314, 0x4e0811a1,<br>0xf7537e82, 0xbd3af235, 0x2ad7d2bb, 0xeb86d391]<br></code></pre></td></tr></table></figure>
+
+<p>我们在 trace 里面搜索魔数和 k 表。说明他是一个魔改的 md5 算法。<br>接下来我们做两件事</p>
+<ul>
+<li>从汇编 trace 中析出 MD5 的结果——用于确认输出是否与 MD5 有直接关系</li>
+<li>从汇编 trace 中析出 MD5 的输入——用于确认函数的输入和 MD5 的输入的关系</li>
+</ul>
+<p>首先做第一件事</p>
+<p>找 0x67452301（<strong>魔数 A</strong>）最后和谁相加<br>0x844525cc</p>
+<p>计算两者相加的结果（如果大于 0xffffffff 则取低的 32 比特） 即 EB8A48CD<br>EB8A48CD<br><img src="https://cdn.nlark.com/yuque/0/2022/png/2744235/1646991530320-178d377e-2f32-43c6-aadd-506fbb5cf4d0.png#clientId=u7e96ddff-24dc-4&from=paste&height=399&id=u6828de8b&margin=%5Bobject%20Object%5D&name=image.png&originHeight=797&originWidth=750&originalType=binary%E2%88%B6=1&size=443621&status=done&style=none&taskId=u8a03ab47-90f6-4903-9e64-bc2bad47315&width=375" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<p>如果输入大于 0xffffffff 比特，那么调整一下端序，CD488AEB，这就是 MD5 前 8 个数字的结果<br>搜索一下 EB8A48CD，发现后面还有它参与的运算，这说明明文长度超过一个分组长，需要进行第二个分组的运算</p>
+<p>同样找 EB8A48CD 最后和谁相加<br>0xEB8A48CD+ 0xd8e846f3 &#x3D; 1 C472 8FC0</p>
+<p>取 C4728FC0 倒转端序 C08F72C4<br>我们发现这就是加密结果的前 8 个数,以此类推，第二第三第四部分，同理<br>C08F72C468C86B764EFF3B782B766DA8<br><strong>我们通过这种方式确认了，MD5 的结果就是加密的结果。</strong><br>那么做另一件事——Trace 汇编中析出 MD5 的明文</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs html">在MD5具体流程中，每轮运算都需要64步，每步的第三个操作是选取明文的一截进行加法运算，第四个操作是和K相加。我们无法定位第三个操作，但因为第四个操作的K都是已知的，所以可以这样描述“第四个操作上方第一个add运算就是明文的一截+中间结果”<br>但是呢。。这前四步其实并没有硬性的顺序要求，生成的汇编代码常常不遵照顺序。。<br>但好在第一个F(B,C,D)的结果是固定的0xffffffff，它是一个很好的“锚点“<br>基于K值和这个锚点，我们可以在汇编trace中准确的析出明文——仅依靠trace汇编，不管OLLVM或者花指令将指令流变成10w行还是100w行，还是SO做了保护，明文不会完整出现在内存中，都不影响这个分析过程。<br></code></pre></td></tr></table></figure>
+
+<p>我们搜索 K 表第一个值：0xd76aa478<br><img src="https://cdn.nlark.com/yuque/0/2022/png/2744235/1646991990819-d76993f8-300c-4588-9840-6b61a963aa1b.png#clientId=u7e96ddff-24dc-4&from=paste&height=109&id=ue7a285b5&margin=%5Bobject%20Object%5D&name=image.png&originHeight=217&originWidth=851&originalType=binary%E2%88%B6=1&size=44335&status=done&style=none&taskId=u61d644ec-bed0-4659-8f47-84f7c2e53b0&width=425.5" srcset="/img/loading.gif" lazyload alt="image.png"><br>0x30443836 我们转换下 36384430， cyberchef 中看一下<br><img src="https://cdn.nlark.com/yuque/0/2022/png/2744235/1646992067733-403875ca-980c-4348-9435-fa2742b680c8.png#clientId=u7e96ddff-24dc-4&from=paste&height=280&id=u0be61860&margin=%5Bobject%20Object%5D&name=image.png&originHeight=560&originWidth=883&originalType=binary%E2%88%B6=1&size=29204&status=done&style=none&taskId=u1432dea9-4709-45b3-9fc6-060ea3c3774&width=441.5" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<p>nonce&#x3D;68D04064-17A1-4705-8F47-534740723D9A&amp;timestamp&#x3D;1647001027020&amp;devicetoken&#x3D;F1517503-9779-32B7-9C78-F5EF501102BC&amp;sign&#x3D;E9C515DC7FAF190C20AB4E7E3C9869E1</p>
+<p>第一个明文块：0x44303945 -&gt; 45393044 -&gt; 68D0</p>
+<p>第二个明文块：0x446884aa-&gt; aa846844-&gt; 4064<br><img src="https://cdn.nlark.com/yuque/0/2022/png/2744235/1646999826876-e8b9cdbe-1d5c-46d1-87b2-b9adc0ba7d84.png#clientId=u7e96ddff-24dc-4&from=paste&height=138&id=u1342c35f&margin=%5Bobject%20Object%5D&name=image.png&originHeight=276&originWidth=1594&originalType=binary%E2%88%B6=1&size=91496&status=done&style=none&taskId=ue077988b-eb9a-4384-bf3f-5ac501237f8&width=797" srcset="/img/loading.gif" lazyload alt="image.png"><br>nonce&#x3D;1F90A568-DBEE-4BD6-93A4-F4ABC2E324F0&amp;timestamp&#x3D;1647000109156&amp;devicetoken&#x3D;F1517503-9779-32B7-9C78-F5EF501102BC&amp;sign&#x3D;A40A56811AE194D2FCAE9A04998AC77F</p>
+<p>0x30394631<br>31463930</p>
+
+              
+            </div>
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>unidgb学习笔记</div>
+      <div>http://blog.uzilol.cn/2022/02/10/yuque/unidgb%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>ive_e （leoli）</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2022年2月10日</div>
+        </div>
+      
+      
+      <div class="license-meta-item">
+        <div>许可协议</div>
+        <div>
+          
+            
+            
+              <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+              <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                <i class="iconfont icon-by"></i>
+              </span>
+              </a>
+            
+          
+        </div>
+      </div>
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/02/10/yuque/ja3%E6%B7%B1%E5%85%A5%E7%A0%94%E7%A9%B6/" title="ja3深入研究">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">ja3深入研究</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/02/10/yuque/%E8%AF%AD%E9%9B%80%E8%87%AA%E5%8A%A8%E5%8F%91%E5%B8%83hexo/" title="语雀自动发布hexo">
+                        <span class="hidden-mobile">语雀自动发布hexo</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var title = subtitle.title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      headingSelector : CONFIG.toc.headingSelector || 'h1,h2,h3,h4,h5,h6',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      collapseDepth   : CONFIG.toc.collapseDepth || 0,
+      scrollSmooth    : true,
+      headingsOffset  : -boardTop
+    });
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+  });
+</script>
+
+
+  <script>
+  (function() {
+    var enableLang = CONFIG.code_language.enable && CONFIG.code_language.default;
+    var enableCopy = CONFIG.copy_btn;
+    if (!enableLang && !enableCopy) {
+      return;
+    }
+
+    function getBgClass(ele) {
+      return Fluid.utils.getBackgroundLightness(ele) >= 0 ? 'code-widget-light' : 'code-widget-dark';
+    }
+
+    var copyTmpl = '';
+    copyTmpl += '<div class="code-widget">';
+    copyTmpl += 'LANG';
+    copyTmpl += '</div>';
+    jQuery('.markdown-body pre').each(function() {
+      var $pre = jQuery(this);
+      if ($pre.find('code.mermaid').length > 0) {
+        return;
+      }
+      if ($pre.find('span.line').length > 0) {
+        return;
+      }
+
+      var lang = '';
+
+      if (enableLang) {
+        lang = CONFIG.code_language.default;
+        if ($pre[0].children.length > 0 && $pre[0].children[0].classList.length >= 2 && $pre.children().hasClass('hljs')) {
+          lang = $pre[0].children[0].classList[1];
+        } else if ($pre[0].getAttribute('data-language')) {
+          lang = $pre[0].getAttribute('data-language');
+        } else if ($pre.parent().hasClass('sourceCode') && $pre[0].children.length > 0 && $pre[0].children[0].classList.length >= 2) {
+          lang = $pre[0].children[0].classList[1];
+          $pre.parent().addClass('code-wrapper');
+        } else if ($pre.parent().hasClass('markdown-body') && $pre[0].classList.length === 0) {
+          $pre.wrap('<div class="code-wrapper"></div>');
+        }
+        lang = lang.toUpperCase().replace('NONE', CONFIG.code_language.default);
+      }
+      $pre.append(copyTmpl.replace('LANG', lang).replace('code-widget">',
+        getBgClass($pre[0]) + (enableCopy ? ' code-widget copy-btn" data-clipboard-snippet><i class="iconfont icon-copy"></i>' : ' code-widget">')));
+
+      if (enableCopy) {
+        Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js', function() {
+          var clipboard = new window.ClipboardJS('.copy-btn', {
+            target: function(trigger) {
+              var nodes = trigger.parentNode.childNodes;
+              for (var i = 0; i < nodes.length; i++) {
+                if (nodes[i].tagName === 'CODE') {
+                  return nodes[i];
+                }
+              }
+            }
+          });
+          clipboard.on('success', function(e) {
+            e.clearSelection();
+            e.trigger.innerHTML = e.trigger.innerHTML.replace('icon-copy', 'icon-success');
+            setTimeout(function() {
+              e.trigger.innerHTML = e.trigger.innerHTML.replace('icon-success', 'icon-copy');
+            }, 2000);
+          });
+        });
+      }
+    });
+  })();
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

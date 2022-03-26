@@ -1,0 +1,766 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="ive_e （leoli）">
+  <meta name="keywords" content="frida unidbg 快手 抖音 淘宝 爬虫">
+  
+    <meta name="description" content="参数context 如何构造DvmObject&lt;?&gt; context &#x3D; vm.resolveClass(“android&#x2F;content&#x2F;Context”).newObject(null);&#x2F;&#x2F; context 字符串类型如何构造list.add(vm.addLocalObject(context));list.add(vm.addL">
+<meta property="og:type" content="article">
+<meta property="og:title" content="unidgb 经验">
+<meta property="og:url" content="http://blog.uzilol.cn/2022/03/10/yuque/unidgb%20%E7%BB%8F%E9%AA%8C/index.html">
+<meta property="og:site_name" content="逆向的尾巴">
+<meta property="og:description" content="参数context 如何构造DvmObject&lt;?&gt; context &#x3D; vm.resolveClass(“android&#x2F;content&#x2F;Context”).newObject(null);&#x2F;&#x2F; context 字符串类型如何构造list.add(vm.addLocalObject(context));list.add(vm.addL">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2022/png/2744235/1647326593739-66509da9-bd8c-4c3a-b494-607e8ad99aca.png#clientId=u9f23d1a0-78bb-4&from=paste&height=35&id=u6a79330b&margin=%5Bobject%20Object%5D&name=image.png&originHeight=70&originWidth=702&originalType=binary%E2%88%B6=1&size=13646&status=done&style=none&taskId=udcf70320-1a76-4834-b271-b303834d486&width=351">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2022/png/2744235/1647334115278-6b7aef92-67a1-4af3-8fe8-f2979f730086.png#clientId=u4548dea7-509b-4&from=paste&height=269&id=u6776a006&margin=%5Bobject%20Object%5D&name=image.png&originHeight=537&originWidth=970&originalType=binary%E2%88%B6=1&size=79447&status=done&style=none&taskId=ubc73c9ec-ecee-4f79-8bce-3b0dc9c3b36&width=485">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2022/png/2744235/1647336136654-9fddc81a-4da5-4153-821e-162459674a40.png#clientId=u3a3d2a4e-8191-4&from=paste&height=271&id=u19caca89&margin=%5Bobject%20Object%5D&name=image.png&originHeight=541&originWidth=662&originalType=binary%E2%88%B6=1&size=82424&status=done&style=none&taskId=u6f81a348-2413-4129-b2ec-18a89b30e53&width=331">
+<meta property="article:published_time" content="2022-03-10T03:01:39.000Z">
+<meta property="article:modified_time" content="2022-03-26T03:46:13.976Z">
+<meta property="article:author" content="ive_e （leoli）">
+<meta property="article:tag" content="frida unidbg 快手 抖音 淘宝 爬虫">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2022/png/2744235/1647326593739-66509da9-bd8c-4c3a-b494-607e8ad99aca.png#clientId=u9f23d1a0-78bb-4&from=paste&height=35&id=u6a79330b&margin=%5Bobject%20Object%5D&name=image.png&originHeight=70&originWidth=702&originalType=binary%E2%88%B6=1&size=13646&status=done&style=none&taskId=udcf70320-1a76-4834-b271-b303834d486&width=351">
+  
+  
+  <title>unidgb 经验 - 逆向的尾巴</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"blog.uzilol.cn","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+
+  
+<meta name="generator" content="Hexo 6.0.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>逆向的尾巴</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          <span id="subtitle" title="unidgb 经验">
+            
+          </span>
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-03-10 11:01" pubdate>
+          2022年3月10日 上午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          <!-- compatible with older versions-->
+          12k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          <!-- compatible with older versions-->
+          101 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+<meta name="referrer" content="no-referrer" />
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">unidgb 经验</h1>
+            
+            <div class="markdown-body">
+              
+              <h1 id="参数"><a href="#参数" class="headerlink" title="参数"></a>参数</h1><h2 id="context-如何构造"><a href="#context-如何构造" class="headerlink" title="context 如何构造"></a>context 如何构造</h2><p>DvmObject&lt;?&gt; context &#x3D; vm.resolveClass(“android&#x2F;content&#x2F;Context”).newObject(null);&#x2F;&#x2F; context</p>
+<h2 id="字符串类型如何构造"><a href="#字符串类型如何构造" class="headerlink" title="字符串类型如何构造"></a>字符串类型如何构造</h2><p>list.add(vm.addLocalObject(context));<br>list.add(vm.addLocalObject(new StringObject(vm, “12345”)));<br>list.add(vm.addLocalObject(new StringObject(vm, “r0ysue”)));</p>
+<p>除了基本类型，比如 int，long 等，其他的对象类型一律要手动 addLocalObject</p>
+<h1 id="Hash-算法"><a href="#Hash-算法" class="headerlink" title="Hash 算法"></a>Hash 算法</h1><p>一个哈希算法，可以简单划分成填充和加密两部分</p>
+<p>多次测试发现不论输入明文多长，都输出固定长度结果，所以疑似哈希算法。<br>输出恒为 40 位，疑似哈希算法中的 SHA1 算法。<br>输出恒为 32 位，疑似哈希算法中的 MD5 算法。</p>
+<p>SHA1 算法的运算部分是由什么组成？SHA1 和 MD5 采用了相同的结构，每 512 比特分组需要一轮运算，我们的输入长度不超过一个分组的长度，所以只用考虑一轮运算。一轮运算是 80 步，每隔 20 步是一种模式。</p>
+<h2 id="MD5-特征"><a href="#MD5-特征" class="headerlink" title="MD5 特征"></a>MD5 特征</h2><ul>
+<li>输出结果是 32 位。</li>
+<li>有四个 IV，MD5 就有四个 IV</li>
+<li>1.是 0x67452301 0xefcdab89 等四个魔术，但单靠这四个数证明不了是 MD5，也可能是别的哈希算法，除此之外，算法可能魔改常数。</li>
+<li>MD5 的 64 个 K，K1-K64 是 MD5 独特的标志，简单的魔改也不会改 K 值。（其实 K 表也可以随便改，但一般的开发人员也不懂 K 的意义，不敢乱改。）</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs java"># 魔数<br>A = <span class="hljs-number">0x67452301</span><br>B = <span class="hljs-number">0xefcdab89</span><br>C = <span class="hljs-number">0x98badcfe</span><br>D = <span class="hljs-number">0x10325476</span><br><br># K表<br>Ktable = [<span class="hljs-number">0xd76aa478</span>, <span class="hljs-number">0xe8c7b756</span>, <span class="hljs-number">0x242070db</span>, <span class="hljs-number">0xc1bdceee</span>, <span class="hljs-number">0xf57c0faf</span>,<br>      <span class="hljs-number">0x4787c62a</span>, <span class="hljs-number">0xa8304613</span>, <span class="hljs-number">0xfd469501</span>, <span class="hljs-number">0x698098d8</span>, <span class="hljs-number">0x8b44f7af</span>,<br>      <span class="hljs-number">0xffff5bb1</span>, <span class="hljs-number">0x895cd7be</span>, <span class="hljs-number">0x6b901122</span>, <span class="hljs-number">0xfd987193</span>, <span class="hljs-number">0xa679438e</span>,<br>      <span class="hljs-number">0x49b40821</span>, <span class="hljs-number">0xf61e2562</span>, <span class="hljs-number">0xc040b340</span>, <span class="hljs-number">0x265e5a51</span>, <span class="hljs-number">0xe9b6c7aa</span>,<br>      <span class="hljs-number">0xd62f105d</span>, <span class="hljs-number">0x2441453</span>, <span class="hljs-number">0xd8a1e681</span>, <span class="hljs-number">0xe7d3fbc8</span>, <span class="hljs-number">0x21e1cde6</span>,<br>      <span class="hljs-number">0xc33707d6</span>, <span class="hljs-number">0xf4d50d87</span>, <span class="hljs-number">0x455a14ed</span>, <span class="hljs-number">0xa9e3e905</span>, <span class="hljs-number">0xfcefa3f8</span>,<br>      <span class="hljs-number">0x676f02d9</span>, <span class="hljs-number">0x8d2a4c8a</span>, <span class="hljs-number">0xfffa3942</span>, <span class="hljs-number">0x8771f681</span>, <span class="hljs-number">0x6d9d6122</span>,<br>      <span class="hljs-number">0xfde5380c</span>, <span class="hljs-number">0xa4beea44</span>, <span class="hljs-number">0x4bdecfa9</span>, <span class="hljs-number">0xf6bb4b60</span>, <span class="hljs-number">0xbebfbc70</span>,<br>      <span class="hljs-number">0x289b7ec6</span>, <span class="hljs-number">0xeaa127fa</span>, <span class="hljs-number">0xd4ef3085</span>, <span class="hljs-number">0x4881d05</span>, <span class="hljs-number">0xd9d4d039</span>,<br>      <span class="hljs-number">0xe6db99e5</span>, <span class="hljs-number">0x1fa27cf8</span>, <span class="hljs-number">0xc4ac5665</span>, <span class="hljs-number">0xf4292244</span>, <span class="hljs-number">0x432aff97</span>,<br>      <span class="hljs-number">0xab9423a7</span>, <span class="hljs-number">0xfc93a039</span>, <span class="hljs-number">0x655b59c3</span>, <span class="hljs-number">0x8f0ccc92</span>, <span class="hljs-number">0xffeff47d</span>,<br>      <span class="hljs-number">0x85845dd1</span>, <span class="hljs-number">0x6fa87e4f</span>, <span class="hljs-number">0xfe2ce6e0</span>, <span class="hljs-number">0xa3014314</span>, <span class="hljs-number">0x4e0811a1</span>,<br>      <span class="hljs-number">0xf7537e82</span>, <span class="hljs-number">0xbd3af235</span>, <span class="hljs-number">0x2ad7d2bb</span>, <span class="hljs-number">0xeb86d391</span>]<br><br></code></pre></td></tr></table></figure>
+
+<h2 id="python-MD5-源码"><a href="#python-MD5-源码" class="headerlink" title="python MD5 源码"></a>python MD5 源码</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java">https:<span class="hljs-comment">//blog.csdn.net/qq_38851536/article/details/117533396</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="SHA1-算法"><a href="#SHA1-算法" class="headerlink" title="SHA1 算法"></a>SHA1 算法</h2><h1 id="Thumb-指令"><a href="#Thumb-指令" class="headerlink" title="Thumb 指令"></a>Thumb 指令</h1><p>ARM32 有 Thumb 和 ARM 两种指令模式，ida 查看到的地址是 thumb 模式<br>ida 里面查看的指令地址需要+1<br>unidgb 输出的地址不需要+1</p>
+<p>何判断是 Thumb 还是 Arm 模式：<br>ARM 模式指令总是 4 字节长度，Thumb 指令长度多数为 2 字节，少部分指令是 4 字节。</p>
+<h1 id="Hook"><a href="#Hook" class="headerlink" title="Hook"></a>Hook</h1><p>Unidbg 内嵌了多种 Hook 工具，目前主要是四种</p>
+<ul>
+<li>Dobby</li>
+<li>HookZz</li>
+<li>xHook</li>
+<li>Whale</li>
+</ul>
+<p>xHook 是爱奇艺开源的基于 PLT HOOK 的 Hook 框架，它无法 Hook 不在符号表里的函数，也不支持 inline hook，这在我们的逆向分析中是无法忍受的，所以在这里不去理会它。</p>
+<p>Whale 在 Unidbg 的测试用例中只有对符号表函数的 Hook，没看到 Inline Hook 或者 非导出函数的 Hook，所以也不去考虑。</p>
+<p>HookZz 是 Dobby 的前身，两者都可以 Hook 非导出表中的函数，即 IDA 中显示为 sub_xxx 的函数，也都可以进行 inline hook，所以二选一就行了。我喜欢 HookZz 这个名字，所以就 HookZz 了</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">IHookZz</span> <span class="hljs-variable">hookZz</span> <span class="hljs-operator">=</span> HookZz.getInstance(emulator);<br>hookZz.wrap(<span class="hljs-keyword">module</span>.base + <span class="hljs-number">0x1BD0</span> + <span class="hljs-number">1</span>, <span class="hljs-keyword">new</span> <span class="hljs-title class_">WrapCallback</span>&lt;HookZzArm32RegisterContext&gt;() &#123; <span class="hljs-comment">// inline wrap导出函数</span><br>           <span class="hljs-meta">@Override</span><br>           <span class="hljs-comment">// 类似于 frida onEnter</span><br>           <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">preCall</span><span class="hljs-params">(Emulator&lt;?&gt; emulator, HookZzArm32RegisterContext ctx, HookEntryInfo info)</span> &#123;<br>               <span class="hljs-comment">// 类似于Frida args[0]</span><br>               <span class="hljs-type">Pointer</span> <span class="hljs-variable">input</span> <span class="hljs-operator">=</span> ctx.getPointerArg(<span class="hljs-number">0</span>);<br>               System.out.println(<span class="hljs-string">&quot;input:&quot;</span> + input.getString(<span class="hljs-number">0</span>));<br>           &#125;;<br><br>           <span class="hljs-meta">@Override</span><br>           <span class="hljs-comment">// 类似于 frida onLeave</span><br>           <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">postCall</span><span class="hljs-params">(Emulator&lt;?&gt; emulator, HookZzArm32RegisterContext ctx, HookEntryInfo info)</span> &#123;<br>               <span class="hljs-type">Pointer</span> <span class="hljs-variable">result</span> <span class="hljs-operator">=</span> ctx.getPointerArg(<span class="hljs-number">0</span>);<br>               System.out.println(<span class="hljs-string">&quot;result:&quot;</span> + result.getString(<span class="hljs-number">0</span>));<br>           &#125;<br>       &#125;);<br></code></pre></td></tr></table></figure>
+
+<p>通常会有个参数是 buffer，在执行前 preCall 将其 push 保存，执行完毕 postCal 再 pop 取出</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs html">// push ctx.push(ctx.getR2Pointer());<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs html">// pop 取出 Pointer output = ctx.pop(); Inspector.inspect(output.getByteArray(0,<br>0x10), &quot;Arg3 after function&quot;);<br></code></pre></td></tr></table></figure>
+
+<h1 id="打-PATCH-一"><a href="#打-PATCH-一" class="headerlink" title="打 PATCH 一"></a>打 PATCH 一</h1><p>地址：0x1E86<br>汇编：MOV R0,1<br>查看“mov r0,1”的机器码，使用<a target="_blank" rel="noopener" href="https://armconverter.com/?code=mov%20r0,1">ARMConvert</a> 转换成 4FF00100</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">patchVerify</span><span class="hljs-params">()</span>&#123;<br>       <span class="hljs-type">int</span> <span class="hljs-variable">patchCode</span> <span class="hljs-operator">=</span> <span class="hljs-number">0x4FF00100</span>; <span class="hljs-comment">//</span><br>       emulator.getMemory().pointer(<span class="hljs-keyword">module</span>.base + <span class="hljs-number">0x1E86</span>).setInt(<span class="hljs-number">0</span>,patchCode);<br>   &#125;<br></code></pre></td></tr></table></figure>
+
+<h1 id="打-PATCH-二"><a href="#打-PATCH-二" class="headerlink" title="打 PATCH 二"></a>打 PATCH 二</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">patchVerify1</span><span class="hljs-params">()</span>&#123;<br>    <span class="hljs-type">Pointer</span> <span class="hljs-variable">pointer</span> <span class="hljs-operator">=</span> UnidbgPointer.pointer(emulator, <span class="hljs-keyword">module</span>.base + <span class="hljs-number">0x1E86</span>);<br>    <span class="hljs-keyword">assert</span> pointer != <span class="hljs-literal">null</span>;<br>    <span class="hljs-type">byte</span>[] code = pointer.getByteArray(<span class="hljs-number">0</span>, <span class="hljs-number">4</span>);<br>    <span class="hljs-keyword">if</span> (!Arrays.equals(code, <span class="hljs-keyword">new</span> <span class="hljs-title class_">byte</span>[]&#123; (<span class="hljs-type">byte</span>)<span class="hljs-number">0xFF</span>, (<span class="hljs-type">byte</span>) <span class="hljs-number">0xF7</span>, (<span class="hljs-type">byte</span>) <span class="hljs-number">0xEB</span>, (<span class="hljs-type">byte</span>) <span class="hljs-number">0xFE</span> &#125;)) &#123; <span class="hljs-comment">// BL sub_1C60</span><br>        <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">IllegalStateException</span>(Inspector.inspectString(code, <span class="hljs-string">&quot;patch32 code=&quot;</span> + Arrays.toString(code)));<br>    &#125;<br>    <span class="hljs-keyword">try</span> (<span class="hljs-type">Keystone</span> <span class="hljs-variable">keystone</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Keystone</span>(KeystoneArchitecture.Arm, KeystoneMode.ArmThumb)) &#123;<br>        <span class="hljs-type">KeystoneEncoded</span> <span class="hljs-variable">encoded</span> <span class="hljs-operator">=</span> keystone.assemble(<span class="hljs-string">&quot;mov r0,1&quot;</span>);<br>        <span class="hljs-type">byte</span>[] patch = encoded.getMachineCode();<br>        <span class="hljs-keyword">if</span> (patch.length != code.length) &#123;<br>            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">IllegalStateException</span>(Inspector.inspectString(patch, <span class="hljs-string">&quot;patch32 length=&quot;</span> + patch.length));<br>        &#125;<br>        pointer.write(<span class="hljs-number">0</span>, patch, <span class="hljs-number">0</span>, patch.length);<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
+
+<h1 id="打印地址所指向的内存"><a href="#打印地址所指向的内存" class="headerlink" title="打印地址所指向的内存"></a>打印地址所指向的内存</h1><p>打印地址所指向的内存，其效果类似于 frida 中 hexdump。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs java">Inspector.inspect(ctx.getR0Pointer().getByteArray(<span class="hljs-number">0</span>, <span class="hljs-number">0x10</span>), <span class="hljs-string">&quot;Arg1&quot;</span>);<br><br></code></pre></td></tr></table></figure>
+
+<h1 id="treemap-参数"><a href="#treemap-参数" class="headerlink" title="treemap 参数"></a>treemap 参数</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs java">TreeMap&lt;String, String&gt; keymap = <span class="hljs-keyword">new</span> <span class="hljs-title class_">TreeMap</span>&lt;String, String&gt;();<br>       keymap.put(<span class="hljs-string">&quot;ad_extra&quot;</span>, <span class="hljs-string">&quot;E1133C23F36571A3F1FDE6B325B17419AAD45287455E5292A19CF51300EAF0F2664C808E2C407FBD9E50BD48F8ED17334F4E2D3A07153630BF62F10DC5E53C42E32274C6076A5593C23EE6587F453F57B8457654CB3DCE90FAE943E2AF5FFAE78E574D02B8BBDFE640AE98B8F0247EC0970D2FD46D84B958E877628A8E90F7181CC16DD22A41AE9E1C2B9CB993F33B65E0B287312E8351ADC4A9515123966ACF8031FF4440EC4C472C78C8B0C6C8D5EA9AB9E579966AD4B9D23F65C40661A73958130E4D71F564B27C4533C14335EA64DD6E28C29CD92D5A8037DCD04C8CCEAEBECCE10EAAE0FAC91C788ECD424D8473CAA67D424450431467491B34A1450A781F341ABB8073C68DBCCC9863F829457C74DBD89C7A867C8B619EBB21F313D3021007D23D3776DA083A7E09CBA5A9875944C745BB691971BFE943BD468138BD727BF861869A68EA274719D66276BD2C3BB57867F45B11D6B1A778E7051B317967F8A5EAF132607242B12C9020328C80A1BBBF28E2E228C8C7CDACD1F6CC7500A08BA24C4B9E4BC9B69E039216AA8B0566B0C50A07F65255CE38F92124CB91D1C1C39A3C5F7D50E57DCD25C6684A57E1F56489AE39BDBC5CFE13C540CA025C42A3F0F3DA9882F2A1D0B5B1B36F020935FD64D58A47EF83213949130B956F12DB92B0546DADC1B605D9A3ED242C8D7EF02433A6C8E3C402C669447A7F151866E66383172A8A846CE49ACE61AD00C1E42223&quot;</span>);<br>       keymap.put(<span class="hljs-string">&quot;appkey&quot;</span>, <span class="hljs-string">&quot;1d8b6e7d45233436&quot;</span>);<br>       keymap.put(<span class="hljs-string">&quot;autoplay_card&quot;</span>, <span class="hljs-string">&quot;11&quot;</span>);<br>       keymap.put(<span class="hljs-string">&quot;banner_hash&quot;</span>, <span class="hljs-string">&quot;10687342131252771522&quot;</span>);<br>       keymap.put(<span class="hljs-string">&quot;build&quot;</span>, <span class="hljs-string">&quot;6180500&quot;</span>);<br>       keymap.put(<span class="hljs-string">&quot;c_locale&quot;</span>, <span class="hljs-string">&quot;zh_CN&quot;</span>);<br>       keymap.put(<span class="hljs-string">&quot;channel&quot;</span>, <span class="hljs-string">&quot;shenma117&quot;</span>);<br>       keymap.put(<span class="hljs-string">&quot;column&quot;</span>, <span class="hljs-string">&quot;2&quot;</span>);<br>       keymap.put(<span class="hljs-string">&quot;device_name&quot;</span>, <span class="hljs-string">&quot;MIX2S&quot;</span>);<br>       keymap.put(<span class="hljs-string">&quot;device_type&quot;</span>, <span class="hljs-string">&quot;0&quot;</span>);<br>       keymap.put(<span class="hljs-string">&quot;flush&quot;</span>, <span class="hljs-string">&quot;6&quot;</span>);<br>       keymap.put(<span class="hljs-string">&quot;ts&quot;</span>, <span class="hljs-string">&quot;1612693177&quot;</span>);<br><br><br>       <span class="hljs-type">DvmClass</span> <span class="hljs-variable">Map</span> <span class="hljs-operator">=</span> vm.resolveClass(<span class="hljs-string">&quot;java/util/Map&quot;</span>);<br>       <span class="hljs-type">DvmClass</span> <span class="hljs-variable">AbstractMap</span> <span class="hljs-operator">=</span> vm.resolveClass(<span class="hljs-string">&quot;java/util/AbstractMap&quot;</span>,Map);<br>       DvmObject&lt;?&gt; input_map = vm.resolveClass(<span class="hljs-string">&quot;java/util/TreeMap&quot;</span>, AbstractMap).newObject(keymap);<br>       list.add(vm.addLocalObject(input_map));<br>       <span class="hljs-type">Number</span> <span class="hljs-variable">number</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">module</span>.callFunction(emulator, <span class="hljs-number">0x1c97</span>, list.toArray())[<span class="hljs-number">0</span>];<br>       <span class="hljs-type">DvmObject</span> <span class="hljs-variable">result</span> <span class="hljs-operator">=</span> vm.getObject(number.intValue());<br></code></pre></td></tr></table></figure>
+
+<p>需要注意的是，代码中补齐了 treeMap 的继承关系：map→AbstractMap→TreeMap，这么做是必要的，否则在有些情况下会报错</p>
+<h1 id="补环境"><a href="#补环境" class="headerlink" title="补环境"></a>补环境</h1><p>如果缺失的环境比较多，来源于某个 java 类。</p>
+<ul>
+<li>不继承自 AbstractJni</li>
+<li>vm.setJni(this);改成 vm.setDvmClassFactory(new ProxyClassFactory());</li>
+</ul>
+<p>然后根据提示复制相关的类到指定位置</p>
+<h1 id="对象数组参数怎么构造"><a href="#对象数组参数怎么构造" class="headerlink" title="对象数组参数怎么构造"></a>对象数组参数怎么构造</h1><p><img src="https://cdn.nlark.com/yuque/0/2022/png/2744235/1647326593739-66509da9-bd8c-4c3a-b494-607e8ad99aca.png#clientId=u9f23d1a0-78bb-4&from=paste&height=35&id=u6a79330b&margin=%5Bobject%20Object%5D&name=image.png&originHeight=70&originWidth=702&originalType=binary%E2%88%B6=1&size=13646&status=done&style=none&taskId=udcf70320-1a76-4834-b271-b303834d486&width=351" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">StringObject</span> <span class="hljs-variable">input2_1</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">StringObject</span>(vm, <span class="hljs-string">&quot;9b69f861-e054-4bc4-9daf-d36ae205ed3e&quot;</span>);<br>     <span class="hljs-type">ByteArray</span> <span class="hljs-variable">input2_2</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">ByteArray</span>(vm, <span class="hljs-string">&quot;GET /aggroup/homepage/display __r0ysue&quot;</span>.getBytes(StandardCharsets.UTF_8));<br>     <span class="hljs-type">DvmInteger</span> <span class="hljs-variable">input2_3</span> <span class="hljs-operator">=</span> DvmInteger.valueOf(vm, <span class="hljs-number">2</span>);<br>     vm.addLocalObject(input2_1);<br>     vm.addLocalObject(input2_2);<br>     vm.addLocalObject(input2_3);<br>     <span class="hljs-comment">// 完整的参数2</span><br>     list.add(vm.addLocalObject(<span class="hljs-keyword">new</span> <span class="hljs-title class_">ArrayObject</span>(input2_1, input2_2, input2_3)));<br></code></pre></td></tr></table></figure>
+
+<h1 id="补文件访问"><a href="#补文件访问" class="headerlink" title="补文件访问"></a>补文件访问</h1><h2 id="方法-1"><a href="#方法-1" class="headerlink" title="方法 1"></a>方法 1</h2><p><img src="https://cdn.nlark.com/yuque/0/2022/png/2744235/1647334115278-6b7aef92-67a1-4af3-8fe8-f2979f730086.png#clientId=u4548dea7-509b-4&from=paste&height=269&id=u6776a006&margin=%5Bobject%20Object%5D&name=image.png&originHeight=537&originWidth=970&originalType=binary%E2%88%B6=1&size=79447&status=done&style=none&taskId=ubc73c9ec-ecee-4f79-8bce-3b0dc9c3b36&width=485" srcset="/img/loading.gif" lazyload alt="image.png"><br>unidbg 对文件做了重定向，打印虚拟目录日志，把缺失的文件放入虚拟目录， 不存在的目录创建即可。</p>
+<h2 id="方法-2："><a href="#方法-2：" class="headerlink" title="方法 2："></a>方法 2：</h2><p>使用代码补</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> FileResult <span class="hljs-title function_">resolve</span><span class="hljs-params">(Emulator emulator, String pathname, <span class="hljs-type">int</span> oflags)</span> &#123;<br>        <span class="hljs-keyword">if</span> ((<span class="hljs-string">&quot;/data/app/com.sankuai.meituan-TEfTAIBttUmUzuVbwRK1DQ==/base.apk&quot;</span>).equals(pathname)) &#123;<br>            <span class="hljs-comment">// 填入想要重定位的文件</span><br>            <span class="hljs-keyword">return</span> FileResult.success(<span class="hljs-keyword">new</span> <span class="hljs-title class_">SimpleFileIO</span>(oflags, <span class="hljs-keyword">new</span> <span class="hljs-title class_">File</span>(<span class="hljs-string">&quot;unidbg-android\\src\\test\\java\\com\\lession10\\mt.apk&quot;</span>), pathname));<br>        &#125;<br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;<br>    &#125;<br></code></pre></td></tr></table></figure>
+
+<h1 id="JNItrace"><a href="#JNItrace" class="headerlink" title="JNItrace"></a>JNItrace</h1><p>jnitrace 可以跟踪所有的 jni 调用，特别适合 unidgb 补环境使用。因为 so 层会有很多通过 jni 来调用 java 层的方法。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java">jnitrace -l libmtguard.so com.sankuai.meituan<br></code></pre></td></tr></table></figure>
+
+<h1 id="SO-依赖"><a href="#SO-依赖" class="headerlink" title="SO 依赖"></a>SO 依赖</h1><p>报错</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs java">[<span class="hljs-number">14</span>:<span class="hljs-number">48</span>:<span class="hljs-number">53</span> <span class="hljs-number">207</span>] INFO [com.github.unidbg.linux.AndroidElfLoader]<br>(AndroidElfLoader:<span class="hljs-number">459</span>) - libscmain.so load dependency libandroid.so failed<br></code></pre></td></tr></table></figure>
+
+<p>解决方法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs java">一种是hook，我们可以在libscmain中hook libandroid.so的函数，或者不管三七二十一，直接把那个<br>SO加载进来，然后hook 其中的各种函数，反正就是Hook，然后自己实现这些个函数的逻辑，给予正确<br>的返回值。<br>另一种方法是使用Unidbg提供的VirtualModule机制，创建一个虚拟SO，手动实现其中的函数，然后加<br>载进内存。（底层应该也用到了hook 回调）<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">DalvikModule</span> <span class="hljs-variable">dm_shared</span> <span class="hljs-operator">=</span> vm.loadLibrary(<span class="hljs-keyword">new</span> <span class="hljs-title class_">File</span>(<span class="hljs-string">&quot;unidbg-</span><br><span class="hljs-string">android/src/test/resources/lession2/libc++_shared.so&quot;</span>),<span class="hljs-literal">true</span>);<br>        dm_shared.callJNI_OnLoad(emulator);<br>        <span class="hljs-type">DalvikModule</span> <span class="hljs-variable">dm_libUserEnv</span> <span class="hljs-operator">=</span> vm.loadLibrary(<span class="hljs-keyword">new</span> <span class="hljs-title class_">File</span>(<span class="hljs-string">&quot;unidbg-</span><br><span class="hljs-string">android/src/test/resources/lession2/libUserEnv.so&quot;</span>),<span class="hljs-literal">true</span>);<br>        dm_libUserEnv.callJNI_OnLoad(emulator);<br>        <span class="hljs-type">DalvikModule</span> <span class="hljs-variable">dm</span> <span class="hljs-operator">=</span> vm.loadLibrary(<span class="hljs-keyword">new</span> <span class="hljs-title class_">File</span>(<span class="hljs-string">&quot;unidbg-</span><br><span class="hljs-string">android/src/test/resources/lession2/libpdd_secure.so&quot;</span>), <span class="hljs-literal">true</span>);<br>        <span class="hljs-keyword">module</span> = dm.getModule();<br>        dm.callJNI_OnLoad(emulator);<br></code></pre></td></tr></table></figure>
+
+<p>注意：加顺序，依赖项必须较</p>
+<ol>
+<li>先加载加载顺序，依赖项必须较加载顺序，依赖项必须较先加载</li>
+<li>如果依赖库缺失环境报错，只要我们的目标 so 没用用到该函数，可以不用管。用到了就必须要补。</li>
+</ol>
+<p>第二种 unidgb 提供了案例参考：<br><img src="https://cdn.nlark.com/yuque/0/2022/png/2744235/1647336136654-9fddc81a-4da5-4153-821e-162459674a40.png#clientId=u3a3d2a4e-8191-4&from=paste&height=271&id=u19caca89&margin=%5Bobject%20Object%5D&name=image.png&originHeight=541&originWidth=662&originalType=binary%E2%88%B6=1&size=82424&status=done&style=none&taskId=u6f81a348-2413-4129-b2ec-18a89b30e53&width=331" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<h1 id="IO-重定向-、系统调用、文件访问（星球样本-1）"><a href="#IO-重定向-、系统调用、文件访问（星球样本-1）" class="headerlink" title="IO 重定向 、系统调用、文件访问（星球样本 1）"></a>IO 重定向 、系统调用、文件访问（星球样本 1）</h1><h2 id="报错："><a href="#报错：" class="headerlink" title="报错："></a>报错：</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs java">INFO [com.github.unidbg.linux.ARM32SyscallHandler] (ARM32SyscallHandler:<span class="hljs-number">1906</span>) -<br>openat dirfd=-<span class="hljs-number">100</span>, pathname=proc/<span class="hljs-number">9720</span>/status, oflags=<span class="hljs-number">0x0</span>, mode=<span class="hljs-number">0</span><br></code></pre></td></tr></table></figure>
+
+<p>openat 的系统调用 ，打开 proc&#x2F;9720&#x2F;status 文件<br>proc 文件系统由内核提供，系统中正在运行的每个进程都有对应的一个目录在 proc 下，其以进程的 PID 号为目录名，这个目录是读取进程信息的接口。 所以说“proc&#x2F;9720&#x2F;status”，就是读取 9720 这个进程的相关信息<br>在 Android 系统中，cmdline 里是应用的进程名，而 Status，则包含的信息非常多：可执行文件名、当前 状态、PID 和 PPID、实际及有效的 UID 和 GID、内存使用情况、以及其他。</p>
+<p>可以用 adb shell 进入文件目录验证： cat status</p>
+<h2 id="利用-unidgb-IO-重定向，补文件访问"><a href="#利用-unidgb-IO-重定向，补文件访问" class="headerlink" title="利用 unidgb IO 重定向，补文件访问"></a>利用 unidgb IO 重定向，补文件访问</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs java"><br>emulator.getSyscallHandler().addIOResolver(<span class="hljs-built_in">this</span>);<br><br></code></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Override</span><br><span class="hljs-keyword">public</span> FileResult <span class="hljs-title function_">resolve</span><span class="hljs-params">(Emulator emulator, String pathname, <span class="hljs-type">int</span> oflags)</span> &#123;<br><span class="hljs-keyword">if</span> ((<span class="hljs-string">&quot;proc/&quot;</span>+emulator.getPid()+<span class="hljs-string">&quot;/cmdline&quot;</span>).equals(pathname)) &#123;<br><span class="hljs-comment">// return FileResult.success(new ByteArrayFileIO(oflags, pathname,</span><br><span class="hljs-string">&quot;ctrip.android.view&quot;</span>.getBytes()));<br><span class="hljs-keyword">return</span> FileResult.success(<span class="hljs-keyword">new</span> <span class="hljs-title class_">SimpleFileIO</span>(oflags, <span class="hljs-keyword">new</span><br><span class="hljs-title class_">File</span>(<span class="hljs-string">&quot;D:\\unidbg-teach\\unidbg android\\src\\test\\java\\com\\lession1\\cmdline&quot;</span>), pathname));<br>&#125;<br><span class="hljs-keyword">if</span> ((<span class="hljs-string">&quot;proc/&quot;</span> + emulator.getPid() + <span class="hljs-string">&quot;/status&quot;</span>).equals(pathname)) &#123;<br><span class="hljs-keyword">return</span> FileResult.success(<span class="hljs-keyword">new</span> <span class="hljs-title class_">ByteArrayFileIO</span>(oflags, pathname,<br>(<span class="hljs-string">&quot;Name: ip.android.view\n&quot;</span> +<br><span class="hljs-string">&quot;State: R (running)\n&quot;</span> +<br><span class="hljs-string">&quot;Tgid: &quot;</span>+emulator.getPid()+<span class="hljs-string">&quot;\n&quot;</span> +<br><span class="hljs-string">&quot;Pid: &quot;</span>+emulator.getPid()+<span class="hljs-string">&quot;\n&quot;</span> +<br><span class="hljs-string">&quot;PPid: 3000\n&quot;</span> +<br><span class="hljs-string">&quot;TracerPid: 0\n&quot;</span> +<br><span class="hljs-string">&quot;Uid: 10163 10163 10163 10163\n&quot;</span> +<br><span class="hljs-string">&quot;Gid: 10163 10163 10163 10163\n&quot;</span> +<br><span class="hljs-string">&quot;FDSize: 512\n&quot;</span> +<br><span class="hljs-string">&quot;Groups: 3002 3003 9997 20163 50163\n&quot;</span> +<br><span class="hljs-string">&quot;VmPeak: 2319784 kB\n&quot;</span> +<br><span class="hljs-string">&quot;VmSize: 2240148 kB\n&quot;</span> +<br><span class="hljs-string">&quot;VmLck: 0 kB\n&quot;</span> +<br><span class="hljs-string">&quot;VmPin: 0 kB\n&quot;</span> +<br><span class="hljs-string">&quot;VmHWM: 413060 kB\n&quot;</span> +<br><span class="hljs-string">&quot;VmRSS: 310988 kB\n&quot;</span> +<br><span class="hljs-string">&quot;VmData: 427160 kB\n&quot;</span> +<br><span class="hljs-string">&quot;VmStk: 8192 kB\n&quot;</span> +<br><span class="hljs-string">&quot;VmExe: 20 kB\n&quot;</span> +<br><span class="hljs-string">&quot;VmLib: 200676 kB\n&quot;</span> +<br><span class="hljs-string">&quot;VmPTE: 2100 kB\n&quot;</span> +<br><span class="hljs-string">&quot;VmSwap: 3356 kB\n&quot;</span> +<br><span class="hljs-string">&quot;Threads: 149\n&quot;</span> +<br><span class="hljs-string">&quot;SigQ: 1/6517\n&quot;</span> +<br><span class="hljs-string">&quot;SigPnd: 0000000000000000\n&quot;</span> +<br><span class="hljs-string">&quot;ShdPnd: 0000000000000000\n&quot;</span> +<br><span class="hljs-string">&quot;SigBlk: 0000000000001204\n&quot;</span> +<br><span class="hljs-string">&quot;SigIgn: 0000000000000000\n&quot;</span> +<br><span class="hljs-string">&quot;SigCgt: 00000006400096fc\n&quot;</span> +<br><span class="hljs-string">&quot;CapInh: 0000000000000000\n&quot;</span> +<br><span class="hljs-string">&quot;CapPrm: 0000000000000000\n&quot;</span> +<br><span class="hljs-string">&quot;CapEff: 0000000000000000\n&quot;</span> +<br><span class="hljs-string">&quot;CapBnd: 0000000000000000\n&quot;</span> +<br><span class="hljs-string">&quot;CapAmb: 0000000000000000\n&quot;</span> +<br><span class="hljs-string">&quot;Seccomp: 2\n&quot;</span> +<br><span class="hljs-string">&quot;Cpus_allowed: 0f\n&quot;</span> +<br><span class="hljs-string">&quot;Cpus_allowed_list: 0-3\n&quot;</span> +<br><span class="hljs-string">&quot;Mems_allowed: 1\n&quot;</span> +<br><span class="hljs-string">&quot;Mems_allowed_list: 0\n&quot;</span> +<br><span class="hljs-string">&quot;voluntary_ctxt_switches: 6918\n&quot;</span> +<br><span class="hljs-string">&quot;nonvoluntary_ctxt_switches: 4988&quot;</span>).getBytes()));<br>&#125;<br><span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;<br><br><br></code></pre></td></tr></table></figure>
+
+<h1 id="补-Application"><a href="#补-Application" class="headerlink" title="补 Application"></a>补 Application</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Override</span><br><span class="hljs-keyword">public</span> DvmObject&lt;?&gt; callObjectMethodV(BaseVM vm, DvmObject&lt;?&gt; dvmObject, String<br>signature, VaList vaList) &#123;<br>    <span class="hljs-keyword">switch</span> (signature)&#123;<br>        <span class="hljs-keyword">case</span> <span class="hljs-string">&quot;android/app/ActivityThread-</span><br><span class="hljs-string">&gt;getApplication()Landroid/app/Application;&quot;</span>:&#123;<br>            <span class="hljs-keyword">return</span> vm.resolveClass(<span class="hljs-string">&quot;android/app/Application&quot;</span>,<br>vm.resolveClass(<span class="hljs-string">&quot;android/content/ContextWrapper&quot;</span>,<br>vm.resolveClass(<span class="hljs-string">&quot;android/content/Context&quot;</span>))).newObject(signature);<br>        &#125;<br>    &#125;<br>    <span class="hljs-keyword">return</span> <span class="hljs-built_in">super</span>.callObjectMethodV(vm, dvmObject, signature, vaList);<br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+<h2 id="继承关系"><a href="#继承关系" class="headerlink" title="继承关系"></a>继承关系</h2><p>android&#x2F;content&#x2F;Context → android&#x2F;content&#x2F;ContextWrapper→android&#x2F;app&#x2F;Application</p>
+<p>returnvm.resolveClass(“android&#x2F;app&#x2F;returnvm.resolveClass(“android&#x2F;app&#x2F;Application”).newObject(signature);Application”).newObject(signature);</p>
+<h2 id="为什么要补继承关系？"><a href="#为什么要补继承关系？" class="headerlink" title="为什么要补继承关系？"></a>为什么要补继承关系？</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs java">访问实例方法的三步骤<br><span class="hljs-number">1.</span>获取类。表示需要访问哪一个JAVA类（FindClass）<br><span class="hljs-number">2.</span>获取方法ID，表示要访问类中的哪个实例方法 （GetMethodID）<br><span class="hljs-number">3.</span>调用方法 （CallxxxMethodxx），参数<span class="hljs-number">1</span>是实例，参数<span class="hljs-number">2</span>是方法ID，后面的参数是所调用的方法其<br>参数。<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs java">我们自己开发的时候可以不用管继承关系：<br>开启debug日志，当报错的时候直接检索methodID，看是哪个超类生成的ID，别管它在”真实代码逻辑“中是太爷爷、爷爷还是爸爸，<br>直接安排它做爸爸<br></code></pre></td></tr></table></figure>
+
+<h1 id="设置日志为-debug"><a href="#设置日志为-debug" class="headerlink" title="设置日志为 debug"></a>设置日志为 debug</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs java">Logger.getLogger(DalvikVM.class).setLevel(Level.DEBUG);<br>    Logger.getLogger(BaseVM.class).setLevel(Level.DEBUG);<br></code></pre></td></tr></table></figure>
+
+<h1 id=""><a href="#" class="headerlink" title=""></a></h1>
+              
+            </div>
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>unidgb 经验</div>
+      <div>http://blog.uzilol.cn/2022/03/10/yuque/unidgb%20%E7%BB%8F%E9%AA%8C/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>ive_e （leoli）</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2022年3月10日</div>
+        </div>
+      
+      
+      <div class="license-meta-item">
+        <div>许可协议</div>
+        <div>
+          
+            
+            
+              <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+              <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                <i class="iconfont icon-by"></i>
+              </span>
+              </a>
+            
+          
+        </div>
+      </div>
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/03/10/yuque/IDA%E7%BB%8F%E9%AA%8C/" title="IDA经验">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">IDA经验</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/03/07/yuque/%E6%94%B9%E6%9C%BA%E5%AF%B9%E6%8A%97%E6%94%B6%E9%9B%86/" title="改机对抗收集">
+                        <span class="hidden-mobile">改机对抗收集</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var title = subtitle.title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      headingSelector : CONFIG.toc.headingSelector || 'h1,h2,h3,h4,h5,h6',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      collapseDepth   : CONFIG.toc.collapseDepth || 0,
+      scrollSmooth    : true,
+      headingsOffset  : -boardTop
+    });
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+  });
+</script>
+
+
+  <script>
+  (function() {
+    var enableLang = CONFIG.code_language.enable && CONFIG.code_language.default;
+    var enableCopy = CONFIG.copy_btn;
+    if (!enableLang && !enableCopy) {
+      return;
+    }
+
+    function getBgClass(ele) {
+      return Fluid.utils.getBackgroundLightness(ele) >= 0 ? 'code-widget-light' : 'code-widget-dark';
+    }
+
+    var copyTmpl = '';
+    copyTmpl += '<div class="code-widget">';
+    copyTmpl += 'LANG';
+    copyTmpl += '</div>';
+    jQuery('.markdown-body pre').each(function() {
+      var $pre = jQuery(this);
+      if ($pre.find('code.mermaid').length > 0) {
+        return;
+      }
+      if ($pre.find('span.line').length > 0) {
+        return;
+      }
+
+      var lang = '';
+
+      if (enableLang) {
+        lang = CONFIG.code_language.default;
+        if ($pre[0].children.length > 0 && $pre[0].children[0].classList.length >= 2 && $pre.children().hasClass('hljs')) {
+          lang = $pre[0].children[0].classList[1];
+        } else if ($pre[0].getAttribute('data-language')) {
+          lang = $pre[0].getAttribute('data-language');
+        } else if ($pre.parent().hasClass('sourceCode') && $pre[0].children.length > 0 && $pre[0].children[0].classList.length >= 2) {
+          lang = $pre[0].children[0].classList[1];
+          $pre.parent().addClass('code-wrapper');
+        } else if ($pre.parent().hasClass('markdown-body') && $pre[0].classList.length === 0) {
+          $pre.wrap('<div class="code-wrapper"></div>');
+        }
+        lang = lang.toUpperCase().replace('NONE', CONFIG.code_language.default);
+      }
+      $pre.append(copyTmpl.replace('LANG', lang).replace('code-widget">',
+        getBgClass($pre[0]) + (enableCopy ? ' code-widget copy-btn" data-clipboard-snippet><i class="iconfont icon-copy"></i>' : ' code-widget">')));
+
+      if (enableCopy) {
+        Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js', function() {
+          var clipboard = new window.ClipboardJS('.copy-btn', {
+            target: function(trigger) {
+              var nodes = trigger.parentNode.childNodes;
+              for (var i = 0; i < nodes.length; i++) {
+                if (nodes[i].tagName === 'CODE') {
+                  return nodes[i];
+                }
+              }
+            }
+          });
+          clipboard.on('success', function(e) {
+            e.clearSelection();
+            e.trigger.innerHTML = e.trigger.innerHTML.replace('icon-copy', 'icon-success');
+            setTimeout(function() {
+              e.trigger.innerHTML = e.trigger.innerHTML.replace('icon-success', 'icon-copy');
+            }, 2000);
+          });
+        });
+      }
+    });
+  })();
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

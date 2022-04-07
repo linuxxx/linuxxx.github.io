@@ -16,23 +16,25 @@
   <meta name="author" content="ive_e （leoli）">
   <meta name="keywords" content="frida unidbg 快手 抖音 淘宝 爬虫">
   
-    <meta name="description" content="twrp 官网 devices 下载对应版本的 twrp img 和 zipimg 为临时 twrp选择最后一个。3.6.0 测试会失败，原因未知。 adb reboot bootloader 在 bootloader 模式下1234PS E:\rom\twrp&gt; fastboot boot .\twrp-3.3.1-0-sargo.imgSending &amp;#x27;boot.img&amp;#x2">
+    <meta name="description" content="0.安装 manager1.配置 manager打开管理器 1.添加目标应用，比如抖音 点击保存记录 2.选择注入，写上模块的起始类， 比如 com.mik.miksandhook.Inject 先记住下方这个添加注入 dex ，先不要添加 2.编写 hook 模块 3.编译点击绿色的小锤头。注意右边选择 app  4.执行推送注入.bat5.在管理器-&gt;注入-&gt;添加注入 dex 选择">
 <meta property="og:type" content="article">
-<meta property="og:title" content="pixel 3a（sargo）刷机">
-<meta property="og:url" content="http://blog.uzilol.cn/2022/02/24/yuque/pixel%203a%EF%BC%88sargo%EF%BC%89%E5%88%B7%E6%9C%BA/index.html">
+<meta property="og:title" content="mikrom 免root注入hook">
+<meta property="og:url" content="http://blog.uzilol.cn/2022/04/07/yuque/mikrom%20%E5%85%8Droot%E6%B3%A8%E5%85%A5hook/index.html">
 <meta property="og:site_name" content="逆向的尾巴">
-<meta property="og:description" content="twrp 官网 devices 下载对应版本的 twrp img 和 zipimg 为临时 twrp选择最后一个。3.6.0 测试会失败，原因未知。 adb reboot bootloader 在 bootloader 模式下1234PS E:\rom\twrp&gt; fastboot boot .\twrp-3.3.1-0-sargo.imgSending &amp;#x27;boot.img&amp;#x2">
+<meta property="og:description" content="0.安装 manager1.配置 manager打开管理器 1.添加目标应用，比如抖音 点击保存记录 2.选择注入，写上模块的起始类， 比如 com.mik.miksandhook.Inject 先记住下方这个添加注入 dex ，先不要添加 2.编写 hook 模块 3.编译点击绿色的小锤头。注意右边选择 app  4.执行推送注入.bat5.在管理器-&gt;注入-&gt;添加注入 dex 选择">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2022/png/2744235/1645668514390-78640d53-cba7-43a9-b36b-d6e45fc790c9.png#clientId=u255e42db-bb00-4&from=paste&height=361&id=ud13a490e&margin=%5Bobject%20Object%5D&name=image.png&originHeight=721&originWidth=830&originalType=binary%E2%88%B6=1&size=112655&status=done&style=none&taskId=u7cbf71eb-5417-422e-945d-b61c355f65f&width=415">
-<meta property="article:published_time" content="2022-02-24T02:07:40.000Z">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2022/png/2744235/1649305011520-7e30a005-c70b-4dac-9fec-963c04b4cb39.png#clientId=u099638d0-0baf-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=533&id=uac839706&margin=%5Bobject%20Object%5D&name=image.png&originHeight=799&originWidth=1091&originalType=binary%E2%88%B6=1&rotation=0&showTitle=false&size=118470&status=done&style=none&taskId=ub24fe786-aff8-4d5a-a325-fc7fe5fcc3b&title=&width=727.3333333333334">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2022/png/2744235/1649304983324-7e68817c-64dc-4f34-ad5d-4a041b72e892.png#clientId=u099638d0-0baf-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=412&id=ufd15851b&margin=%5Bobject%20Object%5D&name=image.png&originHeight=618&originWidth=797&originalType=binary%E2%88%B6=1&rotation=0&showTitle=false&size=71669&status=done&style=none&taskId=ub28130bd-15e4-43d6-a8b5-fe25a78866b&title=&width=531.3333333333334">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2022/png/2744235/1649305202842-8e7b0884-e519-4bcb-9f83-75962c184ac8.png#clientId=u099638d0-0baf-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=471&id=u54b9c8e0&margin=%5Bobject%20Object%5D&name=image.png&originHeight=707&originWidth=1611&originalType=binary%E2%88%B6=1&rotation=0&showTitle=false&size=219071&status=done&style=none&taskId=uecbf7473-efb0-4891-bc49-125afb62397&title=&width=1074">
+<meta property="article:published_time" content="2022-04-07T04:15:55.000Z">
 <meta property="article:modified_time" content="2022-04-07T04:26:18.725Z">
 <meta property="article:author" content="ive_e （leoli）">
 <meta property="article:tag" content="frida unidbg 快手 抖音 淘宝 爬虫">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2022/png/2744235/1645668514390-78640d53-cba7-43a9-b36b-d6e45fc790c9.png#clientId=u255e42db-bb00-4&from=paste&height=361&id=ud13a490e&margin=%5Bobject%20Object%5D&name=image.png&originHeight=721&originWidth=830&originalType=binary%E2%88%B6=1&size=112655&status=done&style=none&taskId=u7cbf71eb-5417-422e-945d-b61c355f65f&width=415">
+<meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2022/png/2744235/1649305011520-7e30a005-c70b-4dac-9fec-963c04b4cb39.png#clientId=u099638d0-0baf-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=533&id=uac839706&margin=%5Bobject%20Object%5D&name=image.png&originHeight=799&originWidth=1091&originalType=binary%E2%88%B6=1&rotation=0&showTitle=false&size=118470&status=done&style=none&taskId=ub24fe786-aff8-4d5a-a325-fc7fe5fcc3b&title=&width=727.3333333333334">
   
   
-  <title>pixel 3a（sargo）刷机 - 逆向的尾巴</title>
+  <title>mikrom 免root注入hook - 逆向的尾巴</title>
 
   <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
 
@@ -188,7 +190,7 @@
     <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
-          <span id="subtitle" title="pixel 3a（sargo）刷机">
+          <span id="subtitle" title="mikrom 免root注入hook">
             
           </span>
         </div>
@@ -200,8 +202,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2022-02-24 10:07" pubdate>
-          2022年2月24日 上午
+        <time datetime="2022-04-07 12:15" pubdate>
+          2022年4月7日 中午
         </time>
       </span>
     
@@ -213,7 +215,7 @@
         <i class="iconfont icon-chart"></i>
         
           <!-- compatible with older versions-->
-          689 字
+          272 字
         
       </span>
     
@@ -225,7 +227,7 @@
         
         
           <!-- compatible with older versions-->
-          6 分钟
+          3 分钟
         
       </span>
     
@@ -263,20 +265,16 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">pixel 3a（sargo）刷机</h1>
+            <h1 style="display: none">mikrom 免root注入hook</h1>
             
             <div class="markdown-body">
               
-              <h1 id="twrp-官网-devices-下载对应版本的-twrp-img-和-zip"><a href="#twrp-官网-devices-下载对应版本的-twrp-img-和-zip" class="headerlink" title="twrp 官网 devices 下载对应版本的 twrp img 和 zip"></a>twrp 官网 devices 下载对应版本的 twrp img 和 zip</h1><p>img 为临时 twrp<br><img src="https://cdn.nlark.com/yuque/0/2022/png/2744235/1645668514390-78640d53-cba7-43a9-b36b-d6e45fc790c9.png#clientId=u255e42db-bb00-4&from=paste&height=361&id=ud13a490e&margin=%5Bobject%20Object%5D&name=image.png&originHeight=721&originWidth=830&originalType=binary%E2%88%B6=1&size=112655&status=done&style=none&taskId=u7cbf71eb-5417-422e-945d-b61c355f65f&width=415" srcset="/img/loading.gif" lazyload alt="image.png"><br>选择最后一个。3.6.0 测试会失败，原因未知。</p>
-<h1 id="adb-reboot-bootloader-在-bootloader-模式下"><a href="#adb-reboot-bootloader-在-bootloader-模式下" class="headerlink" title="adb reboot bootloader 在 bootloader 模式下"></a>adb reboot bootloader 在 bootloader 模式下</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs java">PS E:\rom\twrp&gt; fastboot boot .\twrp-<span class="hljs-number">3.3</span><span class="hljs-number">.1</span>-<span class="hljs-number">0</span>-sargo.img<br>Sending <span class="hljs-string">&#x27;boot.img&#x27;</span> (<span class="hljs-number">65536</span> KB)                      OKAY [  <span class="hljs-number">2.</span>012s]<br>Booting                                            OKAY [  <span class="hljs-number">5.</span>911s]<br>Finished. Total time: <span class="hljs-number">7.</span>970s<br></code></pre></td></tr></table></figure>
-
-<h1 id="adb-push-zip-到-x2F-sdcard"><a href="#adb-push-zip-到-x2F-sdcard" class="headerlink" title="adb push zip 到&#x2F;sdcard"></a>adb push zip 到&#x2F;sdcard</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs java">PS E:\rom\twrp&gt; adb push .\twrp-installer-<span class="hljs-number">3.3</span><span class="hljs-number">.1</span>-<span class="hljs-number">1</span>-sargo.zip /sdcard<br>.\twrp-installer-<span class="hljs-number">3.3</span><span class="hljs-number">.1</span>-<span class="hljs-number">1</span>-sargo.zip: <span class="hljs-number">1</span> file pushed, <span class="hljs-number">0</span> skipped. <span class="hljs-number">69.3</span> MB/s (<span class="hljs-number">10103558</span> bytes in <span class="hljs-number">0.</span>139s)<br>PS E:\rom\twrp&gt;<br></code></pre></td></tr></table></figure>
-
-<h1 id="在-twrp-中-install-选择-zip-包进行安装"><a href="#在-twrp-中-install-选择-zip-包进行安装" class="headerlink" title="在 twrp 中 install 选择 zip 包进行安装"></a>在 twrp 中 install 选择 zip 包进行安装</h1><p>reboot system， 选择 do not install ok 完成~ twrp 的输入</p>
-<h1 id="安装面具"><a href="#安装面具" class="headerlink" title="安装面具"></a>安装面具</h1><p>安装 magisk.apk . 选择修补一个文件，选择 rom 解压出来的 boot.img<br>修补后会在 boot.img 的同文件夹下生成一个 magisk_patched.img 文件，传回电脑</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs java">adb reboot bootloader<br>fastboot flash boot magisk_patched-23000_PUUwu.img<br>fastboot reboot<br></code></pre></td></tr></table></figure>
-
-<p>安装 magisk<br>完成~</p>
+              <h1 id="0-安装-manager"><a href="#0-安装-manager" class="headerlink" title="0.安装 manager"></a>0.安装 manager</h1><h1 id="1-配置-manager"><a href="#1-配置-manager" class="headerlink" title="1.配置 manager"></a>1.配置 manager</h1><p>打开管理器 1.添加目标应用，比如抖音 点击保存记录 2.选择注入，写上模块的起始类， 比如 com.mik.miksandhook.Inject 先记住下方这个添加注入 dex ，先不要添加</p>
+<h1 id="2-编写-hook-模块"><a href="#2-编写-hook-模块" class="headerlink" title="2.编写 hook 模块"></a>2.编写 hook 模块</h1><p><img src="https://cdn.nlark.com/yuque/0/2022/png/2744235/1649305011520-7e30a005-c70b-4dac-9fec-963c04b4cb39.png#clientId=u099638d0-0baf-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=533&id=uac839706&margin=%5Bobject%20Object%5D&name=image.png&originHeight=799&originWidth=1091&originalType=binary%E2%88%B6=1&rotation=0&showTitle=false&size=118470&status=done&style=none&taskId=ub24fe786-aff8-4d5a-a325-fc7fe5fcc3b&title=&width=727.3333333333334" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<h1 id="3-编译"><a href="#3-编译" class="headerlink" title="3.编译"></a>3.编译</h1><p>点击绿色的小锤头。注意右边选择 app</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2022/png/2744235/1649304983324-7e68817c-64dc-4f34-ad5d-4a041b72e892.png#clientId=u099638d0-0baf-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=412&id=ufd15851b&margin=%5Bobject%20Object%5D&name=image.png&originHeight=618&originWidth=797&originalType=binary%E2%88%B6=1&rotation=0&showTitle=false&size=71669&status=done&style=none&taskId=ub28130bd-15e4-43d6-a8b5-fe25a78866b&title=&width=531.3333333333334" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<h1 id="4-执行推送注入-bat"><a href="#4-执行推送注入-bat" class="headerlink" title="4.执行推送注入.bat"></a>4.执行推送注入.bat</h1><h1 id="5-在管理器-gt-注入-gt-添加注入-dex-选择-class-dex"><a href="#5-在管理器-gt-注入-gt-添加注入-dex-选择-class-dex" class="headerlink" title="5.在管理器-&gt;注入-&gt;添加注入 dex 选择 class.dex"></a>5.在管理器-&gt;注入-&gt;添加注入 dex 选择 class.dex</h1><h1 id="6-点击管理器的应用-gt-保存记录"><a href="#6-点击管理器的应用-gt-保存记录" class="headerlink" title="6.点击管理器的应用-&gt;保存记录"></a>6.点击管理器的应用-&gt;保存记录</h1><h1 id="7-启动目标-APP（如果启动了杀掉进程重新启动），查看-logcat"><a href="#7-启动目标-APP（如果启动了杀掉进程重新启动），查看-logcat" class="headerlink" title="7.启动目标 APP（如果启动了杀掉进程重新启动），查看 logcat"></a>7.启动目标 APP（如果启动了杀掉进程重新启动），查看 logcat</h1><p><img src="https://cdn.nlark.com/yuque/0/2022/png/2744235/1649305202842-8e7b0884-e519-4bcb-9f83-75962c184ac8.png#clientId=u099638d0-0baf-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=471&id=u54b9c8e0&margin=%5Bobject%20Object%5D&name=image.png&originHeight=707&originWidth=1611&originalType=binary%E2%88%B6=1&rotation=0&showTitle=false&size=219071&status=done&style=none&taskId=uecbf7473-efb0-4891-bc49-125afb62397&title=&width=1074" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<p>PS： 之后再修改代码 执行步骤 3,4,7 即可生效。无需重头配置</p>
 
               
             </div>
@@ -293,8 +291,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>pixel 3a（sargo）刷机</div>
-      <div>http://blog.uzilol.cn/2022/02/24/yuque/pixel%203a%EF%BC%88sargo%EF%BC%89%E5%88%B7%E6%9C%BA/</div>
+      <div>mikrom 免root注入hook</div>
+      <div>http://blog.uzilol.cn/2022/04/07/yuque/mikrom%20%E5%85%8Droot%E6%B3%A8%E5%85%A5hook/</div>
     </div>
     <div class="license-meta">
       
@@ -306,7 +304,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2022年2月24日</div>
+          <div>2022年4月7日</div>
         </div>
       
       
@@ -336,18 +334,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2022/02/24/yuque/%E5%BF%AB%E6%89%8BH5%E9%80%86%E5%90%91%EF%BC%8C%E5%AD%97%E4%BD%93%E5%8F%8D%E7%88%AC%EF%BC%8C%E4%BA%92%E5%8A%A8%E9%87%8F%E8%8E%B7%E5%8F%96/" title="快手H5逆向，字体反爬，互动量获取">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">快手H5逆向，字体反爬，互动量获取</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2022/02/15/yuque/playwright%20python%E5%AE%9E%E8%B7%B5%E7%BB%8F%E9%AA%8C/" title="playwright python实践经验">
-                        <span class="hidden-mobile">playwright python实践经验</span>
+                      <a href="/2022/04/01/yuque/mikrom%20xposed%20hook%20%E6%B3%A8%E5%85%A5%E6%94%B9%E9%80%A0/" title="mikrom xposed hook 注入改造">
+                        <span class="hidden-mobile">mikrom xposed hook 注入改造</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

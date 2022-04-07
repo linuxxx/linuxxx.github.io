@@ -4,6 +4,19 @@
   
   
   <entry>
+    <title>mikrom 免root注入hook</title>
+    <link href="/2022/04/07/yuque/mikrom%20%E5%85%8Droot%E6%B3%A8%E5%85%A5hook/"/>
+    <url>/2022/04/07/yuque/mikrom%20%E5%85%8Droot%E6%B3%A8%E5%85%A5hook/</url>
+    
+    <content type="html"><![CDATA[<h1 id="0-安装-manager"><a href="#0-安装-manager" class="headerlink" title="0.安装 manager"></a>0.安装 manager</h1><h1 id="1-配置-manager"><a href="#1-配置-manager" class="headerlink" title="1.配置 manager"></a>1.配置 manager</h1><p>打开管理器 1.添加目标应用，比如抖音 点击保存记录 2.选择注入，写上模块的起始类， 比如 com.mik.miksandhook.Inject 先记住下方这个添加注入 dex ，先不要添加</p><h1 id="2-编写-hook-模块"><a href="#2-编写-hook-模块" class="headerlink" title="2.编写 hook 模块"></a>2.编写 hook 模块</h1><p><img src="https://cdn.nlark.com/yuque/0/2022/png/2744235/1649305011520-7e30a005-c70b-4dac-9fec-963c04b4cb39.png#clientId=u099638d0-0baf-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=533&id=uac839706&margin=%5Bobject%20Object%5D&name=image.png&originHeight=799&originWidth=1091&originalType=binary%E2%88%B6=1&rotation=0&showTitle=false&size=118470&status=done&style=none&taskId=ub24fe786-aff8-4d5a-a325-fc7fe5fcc3b&title=&width=727.3333333333334" alt="image.png"></p><h1 id="3-编译"><a href="#3-编译" class="headerlink" title="3.编译"></a>3.编译</h1><p>点击绿色的小锤头。注意右边选择 app</p><p><img src="https://cdn.nlark.com/yuque/0/2022/png/2744235/1649304983324-7e68817c-64dc-4f34-ad5d-4a041b72e892.png#clientId=u099638d0-0baf-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=412&id=ufd15851b&margin=%5Bobject%20Object%5D&name=image.png&originHeight=618&originWidth=797&originalType=binary%E2%88%B6=1&rotation=0&showTitle=false&size=71669&status=done&style=none&taskId=ub28130bd-15e4-43d6-a8b5-fe25a78866b&title=&width=531.3333333333334" alt="image.png"></p><h1 id="4-执行推送注入-bat"><a href="#4-执行推送注入-bat" class="headerlink" title="4.执行推送注入.bat"></a>4.执行推送注入.bat</h1><h1 id="5-在管理器-gt-注入-gt-添加注入-dex-选择-class-dex"><a href="#5-在管理器-gt-注入-gt-添加注入-dex-选择-class-dex" class="headerlink" title="5.在管理器-&gt;注入-&gt;添加注入 dex 选择 class.dex"></a>5.在管理器-&gt;注入-&gt;添加注入 dex 选择 class.dex</h1><h1 id="6-点击管理器的应用-gt-保存记录"><a href="#6-点击管理器的应用-gt-保存记录" class="headerlink" title="6.点击管理器的应用-&gt;保存记录"></a>6.点击管理器的应用-&gt;保存记录</h1><h1 id="7-启动目标-APP（如果启动了杀掉进程重新启动），查看-logcat"><a href="#7-启动目标-APP（如果启动了杀掉进程重新启动），查看-logcat" class="headerlink" title="7.启动目标 APP（如果启动了杀掉进程重新启动），查看 logcat"></a>7.启动目标 APP（如果启动了杀掉进程重新启动），查看 logcat</h1><p><img src="https://cdn.nlark.com/yuque/0/2022/png/2744235/1649305202842-8e7b0884-e519-4bcb-9f83-75962c184ac8.png#clientId=u099638d0-0baf-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=471&id=u54b9c8e0&margin=%5Bobject%20Object%5D&name=image.png&originHeight=707&originWidth=1611&originalType=binary%E2%88%B6=1&rotation=0&showTitle=false&size=219071&status=done&style=none&taskId=uecbf7473-efb0-4891-bc49-125afb62397&title=&width=1074" alt="image.png"></p><p>PS： 之后再修改代码 执行步骤 3,4,7 即可生效。无需重头配置</p>]]></content>
+    
+    
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>mikrom xposed hook 注入改造</title>
     <link href="/2022/04/01/yuque/mikrom%20xposed%20hook%20%E6%B3%A8%E5%85%A5%E6%94%B9%E9%80%A0/"/>
     <url>/2022/04/01/yuque/mikrom%20xposed%20hook%20%E6%B3%A8%E5%85%A5%E6%94%B9%E9%80%A0/</url>

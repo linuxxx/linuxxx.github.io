@@ -4,6 +4,19 @@
   
   
   <entry>
+    <title>Mac安装逆向工具</title>
+    <link href="/2022/04/14/yuque/Mac%E5%AE%89%E8%A3%85%E9%80%86%E5%90%91%E5%B7%A5%E5%85%B7/"/>
+    <url>/2022/04/14/yuque/Mac%E5%AE%89%E8%A3%85%E9%80%86%E5%90%91%E5%B7%A5%E5%85%B7/</url>
+    
+    <content type="html"><![CDATA[<h1 id="brew"><a href="#brew" class="headerlink" title="brew"></a>brew</h1><p><a href="https://gitee.com/cunkai/HomebrewCN">https://gitee.com/cunkai/HomebrewCN</a><a href="https://gitee.com/cunkai/HomebrewCN">https://gitee.com/cunkai/HomebrewCN</a></p><h1 id="jadx"><a href="#jadx" class="headerlink" title="jadx"></a>jadx</h1><p>brew install jadx<br>打开：-</p>]]></content>
+    
+    
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>mikrom 免root注入hook</title>
     <link href="/2022/04/07/yuque/mikrom%20%E5%85%8Droot%E6%B3%A8%E5%85%A5hook/"/>
     <url>/2022/04/07/yuque/mikrom%20%E5%85%8Droot%E6%B3%A8%E5%85%A5hook/</url>
